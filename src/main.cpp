@@ -17,6 +17,3 @@ int main() {
     }
     return 0;
 }
-/*
-clear && g++ -o ./build/tank src/*.cpp -lsfml-graphics -lsfml-window -lsfml-system  && ./build/tank
-*/
