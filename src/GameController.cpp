@@ -1,5 +1,6 @@
 #include <iostream>
 #include "GameController.hpp"
+#include "UI/Debug.hpp"
 
 void GameController::mainLoop() {
     while (this->isRunning()) {
@@ -14,17 +15,9 @@ GameController::GameController() :
     event(new sf::Event()),
     player(new Player({ 100, 100 })),
     map(new Map()),
-    fpsCounter(new sf::Text()),
-    defaultFont(sf::Font()) {
+    debugUI(new DebugUI()) {
 
-    if (!this->defaultFont.loadFromFile("static/caskaydiaNF.ttf")) {
-        std::cout << "Cant load default font" << std::endl;
-    }
-    this->fpsCounter->setFont(this->defaultFont);
-    this->fpsCounter->setCharacterSize(16);
-    this->fpsCounter->setFillColor(sf::Color::White);
     this->map->load("static/maps/map.txt");
-    std::cout << "Succesfully loaded" << std::endl;
 }
 
 GameController::~GameController() {
@@ -32,7 +25,6 @@ GameController::~GameController() {
     delete this->event;
     delete this->player;
     delete this->map;
-    delete this->fpsCounter;
 }
 bool GameController::isRunning() {
     return this->window->isOpen();
@@ -54,9 +46,11 @@ void GameController::pollEvent() {
     }
 }
 void GameController::update(float dt) {
+    DebugUI::DebugInfo info;
+    info.deltaTime = std::to_string(1.f/dt);
     this->pollEvent();
-    this->fpsCounter->setString(std::to_string(1.f/dt) + " fps");
     this->player->update(dt);
+    this->debugUI->update(info);
 }
 void GameController::render() {
     this->window->clear(sf::Color::Black);
@@ -65,6 +59,6 @@ void GameController::render() {
     // Entities
     this->player->draw(*this->window);
     // UI
-    this->window->draw(*this->fpsCounter);
+    this->window->draw(*this->debugUI);
     this->window->display();
 }

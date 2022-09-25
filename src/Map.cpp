@@ -39,8 +39,8 @@ bool Map::load(std::string filename) {
         lineNumber++;
     }
 
+    std::cout << "Succesfully loaded map" << std::endl;
     file.close();
-
     return true;
 }
 void Map::draw(sf::RenderWindow& window) {

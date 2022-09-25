@@ -1,14 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "UI/Debug.hpp"
 #include "Player.hpp"
 #include "Map.hpp"
 
 class GameController {
     sf::RenderWindow *window;
     sf::Event *event;
-    sf::Text *fpsCounter;
-    sf::Font defaultFont;
     sf::Clock clock;
+    DebugUI *debugUI;
     Map *map;
     Player *player;
 
