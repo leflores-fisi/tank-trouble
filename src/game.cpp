@@ -46,7 +46,7 @@ void Game::update(float dt) {
     this->player->update(dt);
 }
 void Game::render() {
-    this->window->clear(sf::Color(0, 0, 0));
+    this->window->clear(sf::Color::Black);
     // Map
     this->map->draw(*this->window);
     // Entities
