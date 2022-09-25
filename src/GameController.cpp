@@ -39,12 +39,17 @@ bool GameController::isRunning() {
 }
 void GameController::pollEvent() {
     while (this->window->pollEvent(*(this->event))) {
+        sf::Event::EventType type = this->event->type;
 
-        if (this->event->type == sf::Event::Closed) this->window->close();
+        if (type == sf::Event::Closed) {
+            this->window->close();
+        }
+        if (type == sf::Event::Resized) {
+            unsigned int width = this->event->size.width;
+            unsigned int height = this->event->size.height;
 
-        if (this->event->type == sf::Event::Resized) {
-            this->window->setView(sf::View(sf::FloatRect(0, 0, this->event->size.width, this->event->size.height)));
-            std::cout << "New size: " << this->event->size.width << "x" << this->event->size.height << std::endl;
+            this->window->setView(sf::View(sf::FloatRect(0, 0, width, height)));
+            std::cout << "New size: " << width << "x" << height << std::endl;
         }
     }
 }
