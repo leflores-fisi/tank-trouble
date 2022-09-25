@@ -17,7 +17,6 @@ Game::Game() :
     this->fpsCounter->setFillColor(sf::Color::White);
     this->map->load("static/maps/map.txt");
     std::cout << "Succesfully loaded" << std::endl;
-    //this->window->setFramerateLimit(15);
 }
 
 Game::~Game() {
@@ -46,7 +45,7 @@ void Game::update(float dt) {
     this->fpsCounter->setString(std::to_string(1.f/dt) + " fps");
     this->player->update(dt);
 }
-void Game::render(float dt) {
+void Game::render() {
     this->window->clear(sf::Color(0, 0, 0));
     // Map
     this->map->draw(*this->window);

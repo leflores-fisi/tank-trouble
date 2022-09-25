@@ -17,5 +17,5 @@ class Game {
     bool isRunning();
     void pollEvent();
     void update(float dt);
-    void render(float dt);
+    void render();
 };

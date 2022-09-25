@@ -6,14 +6,13 @@
 #include "game.hpp"
 
 int main() {
-    Game *game = new Game();
-    //window.setFramerateLimit(10);
+    Game *TankTrouble = new Game();
 
     sf::Clock clock;
-    while (game->isRunning()) {
+    while (TankTrouble->isRunning()) {
         float dt = clock.restart().asSeconds();
-        game->update(dt);
-        game->render(dt);
+        TankTrouble->update(dt);
+        TankTrouble->render();
     }
     return 0;
 }
