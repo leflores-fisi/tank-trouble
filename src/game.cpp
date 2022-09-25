@@ -1,7 +1,15 @@
 #include <iostream>
 #include "game.hpp"
 
-Game::Game() :
+void GameController::mainLoop() {
+    while (this->isRunning()) {
+        float dt = this->clock.restart().asSeconds();
+        this->update(dt);
+        this->render();
+    }
+}
+
+GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
     event(new sf::Event()),
     player(new Player({ 100, 100 })),
@@ -19,17 +27,17 @@ Game::Game() :
     std::cout << "Succesfully loaded" << std::endl;
 }
 
-Game::~Game() {
+GameController::~GameController() {
     delete this->window;
     delete this->event;
     delete this->player;
     delete this->map;
     delete this->fpsCounter;
 }
-bool Game::isRunning() {
+bool GameController::isRunning() {
     return this->window->isOpen();
 }
-void Game::pollEvent() {
+void GameController::pollEvent() {
     while (this->window->pollEvent(*(this->event))) {
 
         if (this->event->type == sf::Event::Closed) this->window->close();
@@ -40,12 +48,12 @@ void Game::pollEvent() {
         }
     }
 }
-void Game::update(float dt) {
+void GameController::update(float dt) {
     this->pollEvent();
     this->fpsCounter->setString(std::to_string(1.f/dt) + " fps");
     this->player->update(dt);
 }
-void Game::render() {
+void GameController::render() {
     this->window->clear(sf::Color::Black);
     // Map
     this->map->draw(*this->window);

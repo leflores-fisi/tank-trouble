@@ -6,13 +6,7 @@
 #include "game.hpp"
 
 int main() {
-    Game *TankTrouble = new Game();
-
-    sf::Clock clock;
-    while (TankTrouble->isRunning()) {
-        float dt = clock.restart().asSeconds();
-        TankTrouble->update(dt);
-        TankTrouble->render();
-    }
+    GameController *TankTrouble = new GameController();
+    TankTrouble->mainLoop();
     return 0;
 }
