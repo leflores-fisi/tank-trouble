@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "player.hpp"
-#include "map.hpp"
+#include "Player.hpp"
+#include "Map.hpp"
 
 class GameController {
     sf::RenderWindow *window;

@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include "map.hpp"
+#include "Map.hpp"
 
 Map::Map() :
     tilesize(128),

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game.hpp"
+#include "GameController.hpp"
 
 void GameController::mainLoop() {
     while (this->isRunning()) {

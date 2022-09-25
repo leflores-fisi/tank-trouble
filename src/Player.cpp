@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include "player.hpp"
+#include "Player.hpp"
 
 Player::Player() :
     body(new sf::RectangleShape({ 30, 30 })),

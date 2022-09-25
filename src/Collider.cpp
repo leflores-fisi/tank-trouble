@@ -1,4 +1,4 @@
-#include "collider.hpp"
+#include "Collider.hpp"
 
 Collider::Collider(sf::Vector2f bounds) :
     shape(sf::RectangleShape(shape)) {
