@@ -55,9 +55,9 @@ void GameController::update(float dt) {
 void GameController::render() {
     this->window->clear(sf::Color::Black);
     // Map
-    this->map->draw(*this->window);
+    this->window->draw(*this->map);
     // Entities
-    this->player->draw(*this->window);
+    this->window->draw(*this->player);
     // UI
     this->window->draw(*this->debugUI);
     this->window->display();

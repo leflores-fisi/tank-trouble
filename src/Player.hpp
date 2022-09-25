@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class Player {
+class Player : public sf::Drawable {
     sf::RectangleShape *body;
     sf::RectangleShape *canon;
     float angle;
@@ -13,7 +13,7 @@ class Player {
     Player(sf::Vector2f position);
 
     void update(float dt);
-    void draw(sf::RenderWindow& window);
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void move(float dt, int direction);
     void rotate(float dt, int direction);
 

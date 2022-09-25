@@ -43,7 +43,7 @@ bool Map::load(std::string filename) {
     file.close();
     return true;
 }
-void Map::draw(sf::RenderWindow& window) {
+void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 
     int wallWidth = 4;
 
@@ -56,7 +56,7 @@ void Map::draw(sf::RenderWindow& window) {
         for (int j = 0; j < horizontalWallsPattern[i].size(); j++) {
             if (horizontalWallsPattern[i][j] == '1') {
                 horizontalWall.setPosition(sf::Vector2f((j+1) * this->tilesize, (i+1) * this->tilesize));
-                window.draw(horizontalWall);
+                target.draw(horizontalWall);
             }
         }
     }
@@ -64,7 +64,7 @@ void Map::draw(sf::RenderWindow& window) {
         for (int j = 0; j < verticalWallsPattern[i].size(); j++) {
             if (verticalWallsPattern[i][j] == '1') {
                 verticalWall.setPosition(sf::Vector2f((j+1) * this->tilesize, (i+1) * this->tilesize));
-                window.draw(verticalWall);
+                target.draw(verticalWall);
             }
         }
     }

@@ -20,9 +20,9 @@ Player::~Player() {
     delete this->body;
     delete this->canon;
 }
-void Player::draw(sf::RenderWindow& window) {
-    window.draw(*this->body);
-    window.draw(*this->canon);
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    target.draw(*this->body);
+    target.draw(*this->canon);
 }
 void Player::update(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) this->move(dt, 1);
