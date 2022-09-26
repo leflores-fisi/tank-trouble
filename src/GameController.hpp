@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "UI/Debug.hpp"
 #include "Player.hpp"
-#include "Map.hpp"
+#include "Map/Map.hpp"
 
 class GameController {
     sf::RenderWindow *window;

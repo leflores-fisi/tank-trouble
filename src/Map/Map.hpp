@@ -4,10 +4,11 @@
 
 class Map : public sf::Drawable {
     size_t tilesize;
-    std::vector<std::string> horizontalWallsPattern;
-    std::vector<std::string> verticalWallsPattern;
-public:
+    std::vector<sf::RectangleShape>* walls;
+  public:
     Map();
+    ~Map();
     bool load(std::string filename);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    std::vector<sf::RectangleShape>* getWalls();
 };
