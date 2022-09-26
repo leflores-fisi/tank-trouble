@@ -6,7 +6,8 @@
 Player::Player() :
     body(new sf::RectangleShape({ 30, 30 })),
     canon(new sf::RectangleShape({ 50, 8 })),
-    velocity(150.f) {
+    velocity(150.f),
+    direction(sf::Vector2f({ 0.f, 0.f })) {
     this->body->setFillColor(sf::Color::White);
     this->body->setPosition(100, 100);
     this->canon->setFillColor(sf::Color::Red);
@@ -40,7 +41,9 @@ void Player::rotate(float dt, int dir) {
     float rad_angle = this->getAngle() + (dir*dt*5);
     float deg_angle = rad_angle * (180/M_PI);
     this->canon->setRotation(deg_angle);
-    this->direction = sf::Vector2f(std::cos(rad_angle), std::sin(rad_angle));
+    // Save the direction of the canon
+    this->direction.x = std::cos(rad_angle);
+    this->direction.y = std::sin(rad_angle);
 }
 
 sf::Vector2f Player::getPosition() {
