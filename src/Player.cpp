@@ -43,18 +43,18 @@ void Player::rotate(float dt, int dir) {
     this->direction = sf::Vector2f(std::cos(rad_angle), std::sin(rad_angle));
 }
 
-inline sf::Vector2f Player::getPosition() {
+sf::Vector2f Player::getPosition() {
     return this->body->getPosition();
 }
-inline void Player::setPosition(sf::Vector2f position) {
+void Player::setPosition(sf::Vector2f position) {
     this->body->setPosition(position);
 }
-inline float Player::getAngle() {
+float Player::getAngle() {
     return this->canon->getRotation() * (M_PI/180);
 }
-inline void Player::setColor(sf::Color color) {
+void Player::setColor(sf::Color color) {
     this->body->setFillColor(color);
 }
-inline sf::FloatRect Player::getBounds() {
+sf::FloatRect Player::getBounds() {
     return this->body->getGlobalBounds();
 }
