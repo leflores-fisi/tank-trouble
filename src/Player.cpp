@@ -6,7 +6,7 @@
 Player::Player() :
     body(new sf::RectangleShape({ 30, 30 })),
     canon(new sf::RectangleShape({ 50, 8 })),
-    angle(0), velocity(150.f) {
+    velocity(150.f) {
     this->body->setFillColor(sf::Color::White);
     this->body->setPosition(100, 100);
     this->canon->setFillColor(sf::Color::Red);
@@ -31,19 +31,30 @@ void Player::update(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) this->rotate(dt, 1);
     this->canon->setPosition(this->body->getPosition() + sf::Vector2f(13, 13));
 }
-void Player::move(float dt, int direction) {
-    float offsetx = cos(this->getAngle())*this->velocity*dt;
-    float offsety = sin(this->getAngle())*this->velocity*dt;
-    this->body->move(direction*offsetx, direction*offsety);
+void Player::move(float dt, int dir) {
+    float offsetx = this->direction.x * this->velocity*dt;
+    float offsety = this->direction.y * this->velocity*dt;
+    this->body->move(offsetx*dir, offsety*dir);
 }
-void Player::rotate(float dt, int direction) {
-    this->angle += dt*direction * 5;
-    this->canon->setRotation(this->angle* (180/M_PI));
+void Player::rotate(float dt, int dir) {
+    float rad_angle = this->getAngle() + (dir*dt*5);
+    float deg_angle = rad_angle * (180/M_PI);
+    this->canon->setRotation(deg_angle);
+    this->direction = sf::Vector2f(std::cos(rad_angle), std::sin(rad_angle));
 }
 
-sf::Vector2f Player::getPosition() { return this->body->getPosition(); }
-void Player::setPosition(sf::Vector2f position) { this->body->setPosition(position); }
-float Player::getAngle() { return this->canon->getRotation()*M_PI/180; }
-
-void Player::setColor(sf::Color color) { this->body->setFillColor(color); }
-sf::FloatRect Player::getBounds() { return this->body->getGlobalBounds(); }
+inline sf::Vector2f Player::getPosition() {
+    return this->body->getPosition();
+}
+inline void Player::setPosition(sf::Vector2f position) {
+    this->body->setPosition(position);
+}
+inline float Player::getAngle() {
+    return this->canon->getRotation() * (M_PI/180);
+}
+inline void Player::setColor(sf::Color color) {
+    this->body->setFillColor(color);
+}
+inline sf::FloatRect Player::getBounds() {
+    return this->body->getGlobalBounds();
+}

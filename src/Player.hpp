@@ -4,7 +4,7 @@
 class Player : public sf::Drawable {
     sf::RectangleShape *body;
     sf::RectangleShape *canon;
-    float angle;
+    sf::Vector2f direction;
     float velocity;
 
   public:
