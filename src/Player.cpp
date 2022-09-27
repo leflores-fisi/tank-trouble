@@ -14,7 +14,7 @@ Player::Player() :
     this->body->setPosition(100, 100);
     this->canon->setFillColor(this->canonColor);
     this->canonRay.append(sf::Vertex(this->body->getPosition() + sf::Vector2f(13, 13)));
-    this->canonRay.append(sf::Vertex(this->canonRay[0].position + this->direction*150.f));
+    this->canonRay.append(sf::Vertex(this->canonRay[0].position + this->direction*this->velocity));
 }
 Player::Player(sf::Vector2f position): Player() {
     this->body->setFillColor(sf::Color::White);
@@ -37,7 +37,7 @@ void Player::update(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) this->rotate(dt, 1);
     this->canon->setPosition(this->body->getPosition() + sf::Vector2f(11, 11));
     this->canonRay[0].position = this->canon->getPosition();
-    this->canonRay[1].position = this->canon->getPosition() + this->direction*150.f;;
+    this->canonRay[1].position = this->canon->getPosition() + this->direction*this->velocity*dt;
 }
 void Player::move(float dt, int dir) {
     float offsetx = this->direction.x * this->velocity*dt;
