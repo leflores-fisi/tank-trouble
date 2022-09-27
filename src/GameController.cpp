@@ -48,9 +48,11 @@ void GameController::pollEvent() {
 void GameController::update(float dt) {
     DebugUI::DebugInfo info;
     info.deltaTime = std::to_string(1.f/dt);
+    this->debugUI->update(info);
+
     this->pollEvent();
     this->player->update(dt);
-    this->debugUI->update(info);
+    this->player->checkCollisionForMap(*(this->map->getWalls()));
 }
 void GameController::render() {
     this->window->clear(sf::Color::Black);
