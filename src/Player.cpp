@@ -12,7 +12,7 @@ Player::Player() :
 
     this->body->setFillColor(sf::Color::White);
     this->body->setPosition(100, 100);
-    this->canon->setFillColor(sf::Color::Red);
+    this->canon->setFillColor(this->canonColor);
     this->canonRay.append(sf::Vertex(this->body->getPosition() + sf::Vector2f(13, 13)));
     this->canonRay.append(sf::Vertex(this->canonRay[0].position + this->direction*150.f));
 }
@@ -73,8 +73,10 @@ bool Player::checkRayVsWallCollition(sf::Vector2f rayOrigin,
     float t_hit_near = std::max(t_nearx, t_neary);
     float t_hit_far = std::min(t_farx, t_fary);
 
-    if (t_hit_near < 0) t_hit_near = t_hit_far;
-    if (t_hit_near < 0) return false;
+    if (t_hit_near < 0) {
+        if (t_hit_far < 0) return false;
+        t_hit_near = t_hit_far;
+    }
     return true;
 }
 
@@ -82,30 +84,23 @@ bool Player::checkCollisionForMap(std::vector<sf::RectangleShape>& walls) {
     // Store mouse coordinates
     sf::Vector2f origin = this->canonRay[0].position;
     sf::Vector2f head = this->canonRay[1].position;
+    bool hasCollided = false;
 
     for (auto& wall : walls) {
         if (checkRayVsWallCollition(origin, head - origin, wall)) {
-            this->setColor(sf::Color::Red);
+            this->setColor(sf::Color::Magenta);
             wall.setFillColor(sf::Color::Red);
+            hasCollided = true;
         }
         else wall.setFillColor(sf::Color::White);
     }
-    this->setColor(sf::Color::White);
+    if (!hasCollided) this->setColor(this->bodyColor);
     return false;
 }
 
-sf::Vector2f Player::getPosition() {
-    return this->body->getPosition();
-}
-void Player::setPosition(sf::Vector2f position) {
-    this->body->setPosition(position);
-}
 float Player::getAngle() {
     return this->canon->getRotation() * (M_PI/180);
 }
 void Player::setColor(sf::Color color) {
     this->body->setFillColor(color);
-}
-sf::FloatRect Player::getBounds() {
-    return this->body->getGlobalBounds();
 }
