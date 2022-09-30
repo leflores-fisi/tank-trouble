@@ -17,7 +17,7 @@ Player::Player() :
     this->body->setPosition(70.f, 70.f);
     this->canon->setFillColor(this->canonColor);
     this->canonRay.append(sf::Vertex(this->body->getPosition()));
-    this->canonRay.append(sf::Vertex(this->canonRay[0].position + this->velocity*VEL));
+    this->canonRay.append(sf::Vertex(this->body->getPosition()));
     // Set canon color
     this->canonRay[0].color = sf::Color::Black;
     this->canonRay[1].color = sf::Color::Black;

@@ -54,7 +54,10 @@ void GameController::update(float dt) {
     this->handleEvents(dt);
 
     // Then, properly manage those events
-    collisionSystem.checkPlayerMapCollision(*this->player, *this->map->getWalls());
+    collisionSystem.checkPlayerMapCollision(
+        *this->player,
+        *this->map->getWalls()
+    );
     this->player->update(dt);
 }
 void GameController::render() {
