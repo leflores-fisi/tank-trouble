@@ -3,20 +3,22 @@
 #include "../Player.hpp"
 
 class CollisionSystem {
-     struct Collision {
+  public:
+     struct CollisionInfo {
           int index;
-          float t_hit_near;
+          float t_hit;
+          sf::Vector2f contactNormal;
      };
-     bool checkRayVsWallCollition(sf::Vector2f rayOrigin,
+  private:
+     bool checkRayVsWallCollision(sf::Vector2f rayOrigin,
                                  sf::Vector2f rayDirection,
                                  sf::RectangleShape rect,
-                                 float& t_hit_near,
-                                 sf::Vector2f& contact_point,
-                                 sf::Vector2f& contact_normal);
+                                 CollisionSystem::CollisionInfo &info);
+     void resolvePlayerCollision(Player& player, CollisionSystem::CollisionInfo info);
   public:
      CollisionSystem();
      ~CollisionSystem();
-     bool checkPlayerMapCollition(
+     bool checkPlayerMapCollision(
           Player& player,
           std::vector<sf::RectangleShape>& walls
      );
