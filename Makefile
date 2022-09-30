@@ -4,7 +4,7 @@ OUTPUTNAME = tank-trouble
 
 INCLUDE = -I./src
 
-SRCFILES := $(shell find src/*.cpp src/UI/*.cpp src/Map/*.cpp) 
+SRCFILES := $(shell find src/*.cpp src/UI/*.cpp src/Map/*.cpp src/Collisions/*.cpp) 
 OBJFILES := $(patsubst %.cpp,%.o,$(SRCFILES))
 OBJFILES := $(foreach dir,$(OBJFILES),$(subst src/,,$(dir)))
 DIR := $(dir $(OBJFILES))

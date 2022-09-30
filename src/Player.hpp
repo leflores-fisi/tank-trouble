@@ -17,20 +17,19 @@ class Player : public sf::Drawable {
     ~Player();
     Player(sf::Vector2f position);
 
-    void update(float dt, std::vector<sf::RectangleShape> &walls);
-    void updatePosition();
+    void update(float dt);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    void addVelocity(float dt, int direction);
     void rotate(float dt, int direction);
-    bool checkCollisionForMap(std::vector<sf::RectangleShape>& walls);
+    void handleInput(float dt);
 
     float getAngle();
     void setColor(sf::Color color);
+    void resetColor();
+    sf::Vector2f getSize();
+    sf::Vector2f getVelocity();
+    sf::Vector2f getPosition();
+    sf::Vector2f getCenterPosition();
+    void setVelocity(sf::Vector2f velocity);
   private:
-    bool checkRayVsWallCollition(sf::Vector2f rayOrigin,
-                                 sf::Vector2f rayDirection,
-                                 sf::RectangleShape rect,
-                                 float& t_hit_near,
-                                 sf::Vector2f& contact_point,
-                                 sf::Vector2f& contact_normal);
+    void addVelocity(float dt, int direction);
 };

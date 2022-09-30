@@ -1,6 +1,5 @@
 #include <iostream>
 #include "GameController.hpp"
-#include "UI/Debug.hpp"
 
 void GameController::mainLoop() {
     while (this->isRunning()) {
@@ -29,7 +28,7 @@ GameController::~GameController() {
 bool GameController::isRunning() {
     return this->window->isOpen();
 }
-void GameController::pollEvent() {
+void GameController::handleEvents(float dt) {
     while (this->window->pollEvent(*(this->event))) {
         sf::Event::EventType type = this->event->type;
 
@@ -44,15 +43,19 @@ void GameController::pollEvent() {
             std::cout << "New size: " << width << "x" << height << std::endl;
         }
     }
+    this->player->handleInput(dt);
 }
 void GameController::update(float dt) {
     DebugUI::DebugInfo info;
     info.deltaTime = std::to_string(1.f/dt);
     this->debugUI->update(info);
 
-    this->pollEvent();
-    this->player->update(dt, *this->map->getWalls());
-    // this->player->checkCollisionForMap(*(this->map->getWalls()));
+    // First, check input and handle events
+    this->handleEvents(dt);
+
+    // Then, properly manage those events
+    collisionSystem.checkPlayerMapCollition(*this->player, *this->map->getWalls());
+    this->player->update(dt);
 }
 void GameController::render() {
     this->window->clear(sf::Color::Black);
