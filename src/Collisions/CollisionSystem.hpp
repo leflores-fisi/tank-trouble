@@ -16,10 +16,11 @@ class CollisionSystem {
   private:
     bool checkRayVsWallCollision(sf::Vector2f rayOrigin,
                                  sf::Vector2f rayDirection,
+                                 sf::Vector2f playerSize,
                                  sf::RectangleShape rect,
                                  CollisionSystem::CollisionInfo &info);
     void resolvePlayerCollision(Player& player, CollisionSystem::CollisionInfo info);
-    float getRayCollisionTime(sf::Vector2f rayOrigin, sf::Vector2f rayDirection, sf::RectangleShape rect);
+    float getRayCollisionTime(sf::Vector2f rayOrigin, sf::Vector2f rayDirection, sf::Vector2f playerSize, sf::RectangleShape rect);
   public:
     CollisionSystem();
     ~CollisionSystem();

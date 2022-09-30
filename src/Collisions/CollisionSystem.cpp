@@ -2,8 +2,6 @@
 #include <cmath>
 #include <iostream>
 
-// TODO: Move "expandedTarget" logic to the collision functions
-
 CollisionSystem::CollisionSystem()  { }
 CollisionSystem::~CollisionSystem() { }
 
@@ -22,17 +20,13 @@ bool CollisionSystem::checkPlayerMapCollision(Player& player, std::vector<sf::Re
     bool hasCollided = false;
     for (int i = 0; i < walls.size(); i++) {
         sf::RectangleShape &wall = walls[i];
-
-        sf::RectangleShape expandedTarget;
-        expandedTarget.setPosition(wall.getPosition() - player.getSize()/2.f);
-        expandedTarget.setSize(wall.getSize() + player.getSize());
-
         CollisionLog collision;
 
         collision.time = this->getRayCollisionTime(
             player.getCenterPosition(),
             player.getVelocity(),
-            expandedTarget
+            player.getSize(),
+            wall
         );
         if (collision.time >= 0.f && collision.time < 1.f) {
             collision.index = i;
@@ -40,9 +34,7 @@ bool CollisionSystem::checkPlayerMapCollision(Player& player, std::vector<sf::Re
             wall.setFillColor(sf::Color::Red);
             hasCollided = true;
         }
-        else {
-            wall.setFillColor(sf::Color(87, 104, 191));
-        }
+        else wall.setFillColor(sf::Color(87, 104, 191));
     }
     // Sort the collisions by the time proximity
     std::sort(collisionsLog.begin(), collisionsLog.end(), [](CollisionLog &a, CollisionLog &b) {
@@ -52,14 +44,11 @@ bool CollisionSystem::checkPlayerMapCollision(Player& player, std::vector<sf::Re
         CollisionInfo collisionInfo;
         sf::RectangleShape &wall = walls.at(collision.index);
 
-        sf::RectangleShape expandedTarget;
-        expandedTarget.setPosition(wall.getPosition() - player.getSize()/2.f);
-        expandedTarget.setSize(wall.getSize() + player.getSize());
-
         this->checkRayVsWallCollision(
             player.getCenterPosition(),
             player.getVelocity(),
-            expandedTarget,
+            player.getSize(),
+            wall,
             collisionInfo
         );
         this->resolvePlayerCollision(player, collisionInfo);
@@ -73,10 +62,15 @@ bool CollisionSystem::checkPlayerMapCollision(Player& player, std::vector<sf::Re
 // Note: I know this logic is repeated at CollisionSystem::checkRayVsWallCollision
 // but the collition must be recalculated
 // this is because as we are resolving collisions, the player's velocity changes
-float CollisionSystem::getRayCollisionTime(sf::Vector2f rayOrigin, sf::Vector2f rayDirection, sf::RectangleShape rect) {
+float CollisionSystem::getRayCollisionTime(sf::Vector2f rayOrigin, sf::Vector2f rayDirection, sf::Vector2f playerSize, sf::RectangleShape rect) {
 
-    sf::Vector2f rectOrigin = rect.getPosition();
-    sf::Vector2f rectLimit  = rect.getPosition() + rect.getSize();
+    // Expand the rect bounds to include the player size
+    sf::RectangleShape target;
+    target.setPosition(rect.getPosition() - playerSize/2.f);
+    target.setSize(rect.getSize() + playerSize);
+
+    sf::Vector2f rectOrigin = target.getPosition();
+    sf::Vector2f rectLimit  = target.getPosition() + target.getSize();
 
     // Calculate the "time" of collision for each axis
     // Two collisions occur, "near" (first) and "far" (second)
@@ -102,10 +96,15 @@ float CollisionSystem::getRayCollisionTime(sf::Vector2f rayOrigin, sf::Vector2f 
 }
 
 bool CollisionSystem::checkRayVsWallCollision
-    (sf::Vector2f rayOrigin, sf::Vector2f rayDirection, sf::RectangleShape rect, CollisionSystem::CollisionInfo& info) {
+    (sf::Vector2f rayOrigin, sf::Vector2f rayDirection, sf::Vector2f playerSize, sf::RectangleShape rect, CollisionSystem::CollisionInfo& info) {
+    
+    // Expand the rect bounds to include the player size
+    sf::RectangleShape target;
+    target.setPosition(rect.getPosition() - playerSize/2.f);
+    target.setSize(rect.getSize() + playerSize);
 
-    sf::Vector2f rectOrigin = rect.getPosition();
-    sf::Vector2f rectLimit  = rect.getPosition() + rect.getSize();
+    sf::Vector2f rectOrigin = target.getPosition();
+    sf::Vector2f rectLimit  = target.getPosition() + target.getSize();
 
     // Calculate the "time" of collision for each axis
     // Two collisions occur, "near" (first) and "far" (second)
