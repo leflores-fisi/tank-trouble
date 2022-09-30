@@ -5,17 +5,6 @@
 CollisionSystem::CollisionSystem()  { }
 CollisionSystem::~CollisionSystem() { }
 
-void CollisionSystem::resolvePlayerCollision(
-    Player& player,
-    CollisionSystem::CollisionInfo info
-) {
-    sf::Vector2f resolvedVelocity = player.getVelocity();
-
-    resolvedVelocity.x += std::abs(resolvedVelocity.x) * info.contactNormal.x * (1.f-info.time);
-    resolvedVelocity.y += std::abs(resolvedVelocity.y) * info.contactNormal.y * (1.f-info.time);
-    player.setVelocity(resolvedVelocity);
-}
-
 bool CollisionSystem::checkPlayerMapCollision(
     Player& player,
     std::vector<sf::RectangleShape>& walls
@@ -23,68 +12,115 @@ bool CollisionSystem::checkPlayerMapCollision(
 
     std::vector<CollisionLog> collisionsLog;
 
-    bool hasCollided = false;
+    // Check for collisions with walls
+    // Here we just need the time of collision in order to sort them
     for (int i = 0; i < walls.size(); i++) {
         sf::RectangleShape &wall = walls[i];
-        CollisionLog collision;
 
-        collision.time = this->getRayCollisionTime(
+        float hitTime = this->getPlayerCollisionTime(
             player.getCenterPosition(),
             player.getVelocity(),
             player.getSize(),
             wall
         );
-        if (collision.time >= 0.f && collision.time < 1.f) {
+        bool isCollision = (hitTime >= 0 && hitTime <= 1);
+
+        if (isCollision) {
+            CollisionLog collision;
             collision.index = i;
+            collision.time = hitTime;
             collisionsLog.push_back(collision);
             wall.setFillColor(sf::Color::Red);
-            hasCollided = true;
         }
         else wall.setFillColor(sf::Color(87, 104, 191));
     }
+
     // Sort the collisions by the time proximity
     std::sort(collisionsLog.begin(), collisionsLog.end(),
         [](CollisionLog &a, CollisionLog &b) {
             return a.time < b.time;
         }
     );
+    // Resolve each collision
     for (const CollisionLog &collision : collisionsLog) {
         CollisionInfo collisionInfo;
         sf::RectangleShape &wall = walls.at(collision.index);
 
-        this->checkRayVsWallCollision(
+        // Collision info must be recalculated
+        // because the player velocity changes as we resolve the collisions
+        this->checkPlayerVsWallCollision(
             player.getCenterPosition(),
             player.getVelocity(),
             player.getSize(),
             wall,
-            collisionInfo
+            collisionInfo // by ref
         );
         this->resolvePlayerCollision(player, collisionInfo);
     }
 
+    bool hasCollided = !collisionsLog.empty();
+
     if (!hasCollided) player.resetColor();
     else player.setColor(sf::Color::Magenta);
+
     return hasCollided;
 }
 
-// Note:
-// I know this logic is repeated at CollisionSystem::checkRayVsWallCollision
-// but the collition must be recalculated
-// this is because as we are resolving collisions, the player's velocity changes
-float CollisionSystem::getRayCollisionTime(
-    sf::Vector2f rayOrigin,
-    sf::Vector2f rayDirection,
+float CollisionSystem::getPlayerCollisionTime(
+    sf::Vector2f playerCenter,
+    sf::Vector2f playerVelocity,
     sf::Vector2f playerSize,
-    sf::RectangleShape rect
+    sf::RectangleShape wall
 ) {
 
     // Expand the rect bounds to include the player size
     sf::RectangleShape target;
-    target.setPosition(rect.getPosition() - playerSize/2.f);
-    target.setSize(rect.getSize() + playerSize);
+    target.setPosition(wall.getPosition() - playerSize/2.f);
+    target.setSize(wall.getSize() + playerSize);
+
+    return this->getRayVsRectCollisionTime(
+        playerCenter,
+        playerVelocity,
+        target
+    );
+}
+bool CollisionSystem::checkPlayerVsWallCollision(
+    sf::Vector2f playerCenter,
+    sf::Vector2f playerVelocity,
+    sf::Vector2f playerSize,
+    sf::RectangleShape wall,
+    CollisionSystem::CollisionInfo& info
+) { 
+    // Expand the rect bounds to include the player size
+    sf::RectangleShape target;
+    target.setPosition(wall.getPosition() - playerSize/2.f);
+    target.setSize(wall.getSize() + playerSize);
 
     sf::Vector2f rectOrigin = target.getPosition();
     sf::Vector2f rectLimit  = target.getPosition() + target.getSize();
+
+    bool hasCollide = this->checkRayVsRectCollision(
+        playerCenter,
+        playerVelocity,
+        target,
+        info
+    );
+    return hasCollide;
+}
+
+/* AABB Logic */
+// Note:
+// I know this logic is repeated at CollisionSystem::checkRayVsRectCollision()
+// but the collition must be recalculated
+// this is because as we are resolving collisions, the player's velocity changes
+float CollisionSystem::getRayVsRectCollisionTime(
+    sf::Vector2f rayOrigin,
+    sf::Vector2f rayDirection,
+    sf::RectangleShape rect
+) { 
+
+    sf::Vector2f rectOrigin = rect.getPosition();
+    sf::Vector2f rectLimit  = rect.getPosition() + rect.getSize();
 
     // Calculate the "time" of collision for each axis
     // Two collisions occur, "near" (first) and "far" (second)
@@ -105,24 +141,19 @@ float CollisionSystem::getRayCollisionTime(
     if (!rayIntersects) return -1;
 
     // Save the "time" for our two collisions
-    float time_first_hit = std::max(t_nearx, t_neary);
-    return time_first_hit;
+    float collision_time = std::max(t_nearx, t_neary); // First collision
+    return collision_time;
 }
 
-bool CollisionSystem::checkRayVsWallCollision(
+bool CollisionSystem::checkRayVsRectCollision(
     sf::Vector2f rayOrigin,
     sf::Vector2f rayDirection,
-    sf::Vector2f playerSize,
     sf::RectangleShape rect,
     CollisionSystem::CollisionInfo& info
 ) { 
-    // Expand the rect bounds to include the player size
-    sf::RectangleShape target;
-    target.setPosition(rect.getPosition() - playerSize/2.f);
-    target.setSize(rect.getSize() + playerSize);
 
-    sf::Vector2f rectOrigin = target.getPosition();
-    sf::Vector2f rectLimit  = target.getPosition() + target.getSize();
+    sf::Vector2f rectOrigin = rect.getPosition();
+    sf::Vector2f rectLimit  = rect.getPosition() + rect.getSize();
 
     // Calculate the "time" of collision for each axis
     // Two collisions occur, "near" (first) and "far" (second)
@@ -163,4 +194,14 @@ bool CollisionSystem::checkRayVsWallCollision(
         else info.contactNormal.y = -1.f;
     }
     return true;
+}
+void CollisionSystem::resolvePlayerCollision(
+    Player& player,
+    CollisionSystem::CollisionInfo info
+) {
+    sf::Vector2f resolvedVelocity = player.getVelocity();
+
+    resolvedVelocity.x += std::abs(resolvedVelocity.x) * info.contactNormal.x * (1.f-info.time);
+    resolvedVelocity.y += std::abs(resolvedVelocity.y) * info.contactNormal.y * (1.f-info.time);
+    player.setVelocity(resolvedVelocity);
 }

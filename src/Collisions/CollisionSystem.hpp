@@ -14,22 +14,33 @@ class CollisionSystem {
         sf::Vector2f contactNormal;
     };
   private:
-    bool checkRayVsWallCollision(
+    bool checkRayVsRectCollision(
         sf::Vector2f rayOrigin,
         sf::Vector2f rayDirection,
-        sf::Vector2f playerSize,
         sf::RectangleShape rect,
+        CollisionInfo &info
+    );
+    float getRayVsRectCollisionTime(
+        sf::Vector2f rayOrigin,
+        sf::Vector2f rayDirection,
+        sf::RectangleShape rect
+    );
+    float getPlayerCollisionTime(
+        sf::Vector2f playerCenter,
+        sf::Vector2f playerVelocity,
+        sf::Vector2f playerSize,
+        sf::RectangleShape wall
+    );
+    bool checkPlayerVsWallCollision(
+        sf::Vector2f playerCenter,
+        sf::Vector2f playerVelocity,
+        sf::Vector2f playerSize,
+        sf::RectangleShape wall,
         CollisionSystem::CollisionInfo &info
     );
     void resolvePlayerCollision(
         Player& player,
         CollisionSystem::CollisionInfo info
-    );
-    float getRayCollisionTime(
-        sf::Vector2f rayOrigin,
-        sf::Vector2f rayDirection,
-        sf::Vector2f playerSize,
-        sf::RectangleShape rect
     );
   public:
     CollisionSystem();
