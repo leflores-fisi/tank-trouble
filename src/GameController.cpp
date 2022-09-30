@@ -13,7 +13,7 @@ void GameController::mainLoop() {
 GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
     event(new sf::Event()),
-    player(new Player({ 100, 100 })),
+    player(new Player({ 190.f, 190.f })),
     map(new Map()),
     debugUI(new DebugUI()) {
 
@@ -51,8 +51,8 @@ void GameController::update(float dt) {
     this->debugUI->update(info);
 
     this->pollEvent();
-    this->player->update(dt);
-    this->player->checkCollisionForMap(*(this->map->getWalls()));
+    this->player->update(dt, *this->map->getWalls());
+    // this->player->checkCollisionForMap(*(this->map->getWalls()));
 }
 void GameController::render() {
     this->window->clear(sf::Color::Black);
