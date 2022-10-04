@@ -1,14 +1,6 @@
 #include <iostream>
 #include "GameController.hpp"
 
-void GameController::mainLoop() {
-    while (this->isRunning()) {
-        float dt = this->clock.restart().asSeconds();
-        this->update(dt);
-        this->render();
-    }
-}
-
 GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
     event(new sf::Event()),
@@ -18,17 +10,36 @@ GameController::GameController() :
 
     this->map->load("static/maps/map.txt");
 }
-
 GameController::~GameController() {
     delete this->window;
     delete this->event;
     delete this->player;
     delete this->map;
 }
-bool GameController::isRunning() {
-    return this->window->isOpen();
+
+void GameController::mainLoop() {
+    while (this->isRunning()) {
+        this->dt = this->clock.restart().asSeconds();
+        this->update();
+        this->render();
+    }
 }
-void GameController::handleEvents(float dt) {
+void GameController::update() {
+    DebugUI::DebugInfo info;
+    info.deltaTime = std::to_string(1.f/this->dt);
+    this->debugUI->update(info);
+
+    // First, check input and handle events
+    this->handleEvents();
+
+    // Then, properly manage those events
+    collisionSystem.checkPlayerMapCollision(
+        *this->player,
+        *this->map->getWalls()
+    );
+    this->player->update(this->dt);
+}
+void GameController::handleEvents() {
     while (this->window->pollEvent(*(this->event))) {
         sf::Event::EventType type = this->event->type;
 
@@ -43,22 +54,7 @@ void GameController::handleEvents(float dt) {
             std::cout << "New size: " << width << "x" << height << std::endl;
         }
     }
-    this->player->handleInput(dt);
-}
-void GameController::update(float dt) {
-    DebugUI::DebugInfo info;
-    info.deltaTime = std::to_string(1.f/dt);
-    this->debugUI->update(info);
-
-    // First, check input and handle events
-    this->handleEvents(dt);
-
-    // Then, properly manage those events
-    collisionSystem.checkPlayerMapCollision(
-        *this->player,
-        *this->map->getWalls()
-    );
-    this->player->update(dt);
+    this->player->handleInput(this->dt);
 }
 void GameController::render() {
     this->window->clear(sf::Color::Black);
@@ -69,4 +65,7 @@ void GameController::render() {
     // UI
     this->window->draw(*this->debugUI);
     this->window->display();
+}
+bool GameController::isRunning() {
+    return this->window->isOpen();
 }

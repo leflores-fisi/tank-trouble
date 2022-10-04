@@ -13,10 +13,11 @@ class GameController {
     DebugUI *debugUI;
     Map *map;
     Player *player;
+    float dt;
 
     bool isRunning();
-    void handleEvents(float dt);
-    void update(float dt);
+    void handleEvents();
+    void update();
     void render();
   public:
     GameController();
