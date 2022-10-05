@@ -7,12 +7,12 @@
 
 class GameController {
     sf::RenderWindow *window;
-    sf::Event *event;
+    Map     *map;
+    Player  *player;
+    DebugUI *debugUI;
+    sf::Event event;
     sf::Clock clock;
     CollisionSystem collisionSystem;
-    DebugUI *debugUI;
-    Map *map;
-    Player *player;
     float dt;
 
     bool isRunning();

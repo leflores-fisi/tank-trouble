@@ -3,8 +3,8 @@
 
 GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
-    event(new sf::Event()),
     player(new Player({ 190.f, 190.f })),
+    event(sf::Event()),
     map(new Map()),
     debugUI(new DebugUI()) {
 
@@ -12,7 +12,6 @@ GameController::GameController() :
 }
 GameController::~GameController() {
     delete this->window;
-    delete this->event;
     delete this->player;
     delete this->map;
 }
@@ -40,15 +39,15 @@ void GameController::update() {
     this->player->update(this->dt);
 }
 void GameController::handleEvents() {
-    while (this->window->pollEvent(*(this->event))) {
-        sf::Event::EventType type = this->event->type;
+    while (this->window->pollEvent(this->event)) {
+        sf::Event::EventType type = this->event.type;
 
         if (type == sf::Event::Closed) {
             this->window->close();
         }
         if (type == sf::Event::Resized) {
-            unsigned int width = this->event->size.width;
-            unsigned int height = this->event->size.height;
+            unsigned int width  = this->event.size.width;
+            unsigned int height = this->event.size.height;
 
             this->window->setView(sf::View(sf::FloatRect(0, 0, width, height)));
             std::cout << "New size: " << width << "x" << height << std::endl;
