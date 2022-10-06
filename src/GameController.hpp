@@ -3,7 +3,7 @@
 #include "Collisions/CollisionSystem.hpp"
 #include "UI/Debug.hpp"
 #include "Map/Map.hpp"
-#include "Player.hpp"
+#include "Player/Player.hpp"
 
 class GameController {
     sf::RenderWindow *window;

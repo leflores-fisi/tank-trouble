@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../Player.hpp"
+#include "Player/Player.hpp"
 
 class CollisionSystem {
   public:
