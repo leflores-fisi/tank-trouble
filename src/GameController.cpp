@@ -1,5 +1,6 @@
 #include <iostream>
 #include "GameController.hpp"
+#include "Input/Input.hpp"
 
 GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
@@ -8,6 +9,8 @@ GameController::GameController() :
     map(new Map()),
     debugUI(new DebugUI()) {
 
+    Input::setup();
+    this->window->setKeyRepeatEnabled(false);
     this->map->load("static/maps/map.txt");
 }
 GameController::~GameController() {
@@ -51,6 +54,14 @@ void GameController::handleEvents() {
 
             this->window->setView(sf::View(sf::FloatRect(0, 0, width, height)));
             std::cout << "New size: " << width << "x" << height << std::endl;
+        }
+
+        if (!this->window->hasFocus()) continue;
+        if (type == sf::Event::KeyPressed || type == sf::Event::KeyReleased) {
+            Input::pushKeyEvent(this->event);
+        }
+        if (type == sf::Event::MouseButtonPressed || type == sf::Event::MouseButtonReleased) {
+            Input::pushMouseEvent(this->event);
         }
     }
     this->player->handleInput(this->dt);

@@ -1,6 +1,7 @@
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <cmath>
+#include "Input/Input.hpp"
 #include "Player.hpp"
 
 // Note: canonRay is now only a visual representation of the velocity vector,
@@ -38,10 +39,10 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 void Player::handleInput(float dt) {
     this->setVelocity({ 0, 0 });
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) this->addVelocity(dt, 1);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) this->rotate(dt, -1);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) this->addVelocity(dt, -1);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) this->rotate(dt, 1);
+    if (Input::isKeyPressed(sf::Keyboard::W)) this->addVelocity(dt, 1);
+    if (Input::isKeyPressed(sf::Keyboard::A)) this->rotate(dt, -1);
+    if (Input::isKeyPressed(sf::Keyboard::S)) this->addVelocity(dt, -1);
+    if (Input::isKeyPressed(sf::Keyboard::D)) this->rotate(dt, 1);
 }
 void Player::update(float dt) {
     this->body->move(this->velocity);

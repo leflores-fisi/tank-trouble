@@ -4,7 +4,7 @@ OUTPUTNAME = tank-trouble
 
 INCLUDE = -I./src
 
-SRCFILES := $(shell find src/*.cpp src/UI/*.cpp src/Map/*.cpp src/Collisions/*.cpp) 
+SRCFILES := $(shell find src/*.cpp src/UI/*.cpp src/Map/*.cpp src/Collisions/*.cpp src/Input/*cpp) 
 OBJFILES := $(patsubst %.cpp,%.o,$(SRCFILES))
 OBJFILES := $(foreach dir,$(OBJFILES),$(subst src/,,$(dir)))
 DIR := $(dir $(OBJFILES))
@@ -14,7 +14,7 @@ $(foreach d,$(DIR),$(shell mkdir -p $(BUILD)/$(d)))
 $(shell mkdir -p $(BIN))
 
 CC = g++
-CFLAGS  = -g -std=c++11
+CFLAGS  = -g -std=c++17
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
 $(info Source: $(SRCFILES))
