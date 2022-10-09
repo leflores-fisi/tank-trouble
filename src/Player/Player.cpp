@@ -36,6 +36,10 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*this->body);
     target.draw(*this->canon);
     target.draw(this->canonRay);
+    for (const Bullet &b : this->bullets) {
+        target.draw(b);
+    }
+    std::cout << "Bullets: " << this->bullets.size() << std::endl;
 }
 void Player::handleInput(float dt) {
     this->setVelocity({ 0, 0 });
@@ -43,12 +47,20 @@ void Player::handleInput(float dt) {
     if (Input::isKeyPressed(sf::Keyboard::A)) this->rotate(dt, -1);
     if (Input::isKeyPressed(sf::Keyboard::S)) this->addVelocity(dt, -1);
     if (Input::isKeyPressed(sf::Keyboard::D)) this->rotate(dt, 1);
+    if (Input::isKeyPressed(sf::Keyboard::Space)) this->shoot();
 }
 void Player::update(float dt) {
     this->body->move(this->velocity);
     this->canon->setPosition(this->getCenterPosition());
     this->canonRay[0].position = this->getCenterPosition();
     this->canonRay[1].position = this->getCenterPosition() + this->velocity;
+    for (Bullet &b : this->bullets) {
+        b.update(dt);
+    }
+}
+bool Player::shoot() {
+    this->bullets.push_back(Bullet(this->canon->getPosition(), this->direction));
+    return true;
 }
 void Player::addVelocity(float dt, int dir) {
     float offsetx = this->direction.x * VEL * dt;

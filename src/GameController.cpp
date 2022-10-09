@@ -2,6 +2,8 @@
 #include "GameController.hpp"
 #include "Input/Input.hpp"
 
+// TODO: Class Entity
+
 GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
     player(new Player({ 190.f, 190.f })),

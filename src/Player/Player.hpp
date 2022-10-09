@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Player/Bullet.hpp"
 
 #define VEL 150.f
 
@@ -11,6 +12,7 @@ class Player : public sf::Drawable {
     sf::VertexArray canonRay;
     sf::Vector2f velocity;
     sf::Vector2f direction; // normalized
+    std::vector<Bullet> bullets;
 
   public:
     Player();
@@ -20,6 +22,7 @@ class Player : public sf::Drawable {
     void update(float dt);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void rotate(float dt, int direction);
+    bool shoot();
     void handleInput(float dt);
 
     float getAngle();
