@@ -9,7 +9,6 @@ class Player : public sf::Drawable {
     sf::Color bodyColor = sf::Color::White;
     sf::RectangleShape *canon;
     sf::Color canonColor = sf::Color::Red;
-    sf::VertexArray canonRay;
     sf::Vector2f velocity;
     sf::Vector2f direction; // normalized
     std::vector<Bullet*> bullets;

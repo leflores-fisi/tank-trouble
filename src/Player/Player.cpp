@@ -4,24 +4,15 @@
 #include "Input/Input.hpp"
 #include "Player/Player.hpp"
 
-// Note: canonRay is now only a visual representation of the velocity vector,
-//       it is not used for collision detection
-
 Player::Player() :
     body(new sf::RectangleShape({ 30, 30 })),
     canon(new sf::RectangleShape({ 50, 8 })),
-    canonRay(sf::VertexArray(sf::Lines)),
     velocity({ 0, 0 }),
     direction(sf::Vector2f({ 1.f, 0.f })) {
 
     this->body->setFillColor(sf::Color::White);
     this->body->setPosition(70.f, 70.f);
     this->canon->setFillColor(this->canonColor);
-    this->canonRay.append(sf::Vertex(this->body->getPosition()));
-    this->canonRay.append(sf::Vertex(this->body->getPosition()));
-    // Set canon color
-    this->canonRay[0].color = sf::Color::Black;
-    this->canonRay[1].color = sf::Color::Black;
 }
 Player::Player(sf::Vector2f position): Player() {
     this->body->setFillColor(sf::Color::White);
@@ -35,7 +26,6 @@ Player::~Player() {
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*this->body);
     target.draw(*this->canon);
-    target.draw(this->canonRay);
     for (const Bullet* b : this->bullets) {
         target.draw(*b);
     }
@@ -51,8 +41,6 @@ void Player::handleInput(float dt) {
 void Player::update(float dt) {
     this->body->move(this->velocity);
     this->canon->setPosition(this->getCenterPosition());
-    this->canonRay[0].position = this->getCenterPosition();
-    this->canonRay[1].position = this->getCenterPosition() + this->velocity;
     for (int i = 0; i < bullets.size(); i++) {
         auto &b = bullets.at(i);
         if (b->getLifeTime().asSeconds() >= 1.f) {
