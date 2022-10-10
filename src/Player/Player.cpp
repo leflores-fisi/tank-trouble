@@ -15,6 +15,7 @@ tt::Player::Player() :
 
     this->id = "player1";
     this->classList.add("player");
+    std::cout << "Player created" << std::endl;
     this->body->setSize({ this->size, this->size });
     this->body->setFillColor(sf::Color::White);
     this->body->setPosition(70.f, 70.f);

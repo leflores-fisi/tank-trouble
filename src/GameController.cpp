@@ -8,7 +8,6 @@
 
 tt::GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
-    player(new Player({ 190.f, 190.f })),
     event(sf::Event()),
     map(new Map()),
     debugUI(new DebugUI()) {
@@ -16,11 +15,11 @@ tt::GameController::GameController() :
     Input::setup();
     this->window->setKeyRepeatEnabled(false);
     this->map->load("static/maps/map.txt");
+    tt::EntityManager::instantiate(new Player({ 190.f, 190.f }));
 }
 tt::GameController::~GameController() {
     delete this->window;
     delete this->debugUI;
-    delete this->player; // TODO: fix
     delete this->map;
     tt::EntityManager::deleteALlEntities();
 }

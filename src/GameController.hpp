@@ -10,7 +10,6 @@ namespace tt {
 class GameController {
     sf::RenderWindow *window;
     tt::Map     *map;
-    tt::Player  *player;
     tt::DebugUI *debugUI;
     sf::Event event;
     sf::Clock clock;

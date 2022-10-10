@@ -51,6 +51,7 @@ std::vector<tt::Entity*> tt::EntityManager::querySelectorAll(std::string query) 
 
 void tt::EntityManager::instantiate(tt::Entity* entity) {
     tt::EntityManager::entities.push_back(entity);
+    std::cout << "Entity '" << entity->id << "' instantiated" << std::endl;
 }
 void tt::EntityManager::deleteEntity(tt::Entity* entityToRemove) {
     for (int i = 0; i < tt::EntityManager::entities.size(); i++) {
