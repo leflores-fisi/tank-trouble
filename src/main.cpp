@@ -6,7 +6,7 @@
 #include "GameController.hpp"
 
 int main() {
-    GameController *TankTrouble = new GameController();
+    tt::GameController *TankTrouble = new tt::GameController();
     TankTrouble->mainLoop();
     return 0;
 }

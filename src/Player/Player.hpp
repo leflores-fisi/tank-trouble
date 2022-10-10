@@ -4,6 +4,8 @@
 
 #define VEL 150.f
 
+namespace tt {
+
 class Player : public sf::Drawable {
     sf::RectangleShape *body;
     sf::Color bodyColor = sf::Color::White;
@@ -11,7 +13,7 @@ class Player : public sf::Drawable {
     sf::Color canonColor = sf::Color::Red;
     sf::Vector2f velocity;
     sf::Vector2f direction; // normalized
-    std::vector<Bullet*> bullets;
+    std::vector<tt::Bullet*> bullets;
 
   public:
     Player();
@@ -35,3 +37,4 @@ class Player : public sf::Drawable {
   private:
     void addVelocity(float dt, int direction);
 };
+}

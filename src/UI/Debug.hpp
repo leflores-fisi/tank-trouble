@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+namespace tt {
+
 class DebugUI : public sf::Drawable {
     sf::Text *fpsCounter;
     sf::Font defaultFont;
@@ -14,3 +16,4 @@ class DebugUI : public sf::Drawable {
     void update(DebugInfo debugInfo);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
+}

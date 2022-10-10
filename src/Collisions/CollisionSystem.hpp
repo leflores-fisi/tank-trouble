@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Player/Player.hpp"
 
+namespace tt {
+
 class CollisionSystem {
   public:
     struct CollisionLog {
@@ -50,3 +52,4 @@ class CollisionSystem {
         std::vector<sf::RectangleShape>& walls
     );
 };
+} // namespace tt

@@ -1,14 +1,14 @@
 #include <iostream>
 #include "Input/Input.hpp"
 
-Input::Input()  { }
-Input::~Input() { }
+tt::Input::Input()  { }
+tt::Input::~Input() { }
 
 /*
  * Populate the Input::keysMap and Input::buttonsMap arrays
  * with the sfml key and button codes
  */
-void Input::setup() {
+void tt::Input::setup() {
     // Keyboard keys setup
     sf::Keyboard::Key key = sf::Keyboard::Key::A;
     // Iterate and initialize all keys
@@ -26,7 +26,7 @@ void Input::setup() {
     }
 }
 
-void Input::pushKeyEvent(sf::Event event) {
+void tt::Input::pushKeyEvent(sf::Event event) {
     if (event.type == sf::Event::KeyPressed) {
         Input::keysMap[event.key.code].second = true;
     }
@@ -35,7 +35,7 @@ void Input::pushKeyEvent(sf::Event event) {
     }
 }
 
-void Input::pushMouseEvent(sf::Event event) {
+void tt::Input::pushMouseEvent(sf::Event event) {
     if (event.type == sf::Event::MouseButtonPressed) {
         Input::buttonsMap[event.mouseButton.button].second = true;
     }
@@ -44,9 +44,9 @@ void Input::pushMouseEvent(sf::Event event) {
     }
 }
 
-bool Input::isKeyPressed(sf::Keyboard::Key key) {
+bool tt::Input::isKeyPressed(sf::Keyboard::Key key) {
     return Input::keysMap[key].second;
 }
-bool Input::isButtonPressed(sf::Mouse::Button button) {
+bool tt::Input::isButtonPressed(sf::Mouse::Button button) {
     return Input::buttonsMap[button].second;
 }

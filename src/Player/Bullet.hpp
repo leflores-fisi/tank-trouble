@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+namespace tt {
+
 class Bullet : public sf::Drawable {
     
     sf::Vector2f velocity;
@@ -16,3 +18,4 @@ class Bullet : public sf::Drawable {
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     sf::Time getLifeTime();
 };
+}

@@ -5,14 +5,16 @@
 #include "Map/Map.hpp"
 #include "Player/Player.hpp"
 
+namespace tt {
+
 class GameController {
     sf::RenderWindow *window;
-    Map     *map;
-    Player  *player;
-    DebugUI *debugUI;
+    tt::Map     *map;
+    tt::Player  *player;
+    tt::DebugUI *debugUI;
     sf::Event event;
     sf::Clock clock;
-    CollisionSystem collisionSystem;
+    tt::CollisionSystem collisionSystem;
     float dt;
 
     bool isRunning();
@@ -24,3 +26,4 @@ class GameController {
     ~GameController();
     void mainLoop();
 };
+}

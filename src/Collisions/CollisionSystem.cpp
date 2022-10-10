@@ -2,10 +2,10 @@
 #include <cmath>
 #include <iostream>
 
-CollisionSystem::CollisionSystem()  { }
-CollisionSystem::~CollisionSystem() { }
+tt::CollisionSystem::CollisionSystem()  { }
+tt::CollisionSystem::~CollisionSystem() { }
 
-bool CollisionSystem::checkPlayerMapCollision(
+bool tt::CollisionSystem::checkPlayerMapCollision(
     Player& player,
     std::vector<sf::RectangleShape>& walls
 ) {
@@ -66,7 +66,7 @@ bool CollisionSystem::checkPlayerMapCollision(
     return hasCollided;
 }
 
-float CollisionSystem::getPlayerCollisionTime(
+float tt::CollisionSystem::getPlayerCollisionTime(
     sf::Vector2f playerCenter,
     sf::Vector2f playerVelocity,
     sf::Vector2f playerSize,
@@ -84,7 +84,7 @@ float CollisionSystem::getPlayerCollisionTime(
         target
     );
 }
-bool CollisionSystem::checkPlayerVsWallCollision(
+bool tt::CollisionSystem::checkPlayerVsWallCollision(
     sf::Vector2f playerCenter,
     sf::Vector2f playerVelocity,
     sf::Vector2f playerSize,
@@ -113,7 +113,7 @@ bool CollisionSystem::checkPlayerVsWallCollision(
 // I know this logic is repeated at CollisionSystem::checkRayVsRectCollision()
 // but the collition must be recalculated
 // this is because as we are resolving collisions, the player's velocity changes
-float CollisionSystem::getRayVsRectCollisionTime(
+float tt::CollisionSystem::getRayVsRectCollisionTime(
     sf::Vector2f rayOrigin,
     sf::Vector2f rayDirection,
     sf::RectangleShape rect
@@ -145,7 +145,7 @@ float CollisionSystem::getRayVsRectCollisionTime(
     return collision_time;
 }
 
-bool CollisionSystem::checkRayVsRectCollision(
+bool tt::CollisionSystem::checkRayVsRectCollision(
     sf::Vector2f rayOrigin,
     sf::Vector2f rayDirection,
     sf::RectangleShape rect,
@@ -195,7 +195,7 @@ bool CollisionSystem::checkRayVsRectCollision(
     }
     return true;
 }
-void CollisionSystem::resolvePlayerCollision(
+void tt::CollisionSystem::resolvePlayerCollision(
     Player& player,
     CollisionSystem::CollisionInfo info
 ) {

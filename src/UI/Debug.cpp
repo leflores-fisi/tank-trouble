@@ -2,7 +2,7 @@
 #include <iostream>
 #include "UI/Debug.hpp"
 
-DebugUI::DebugUI() : fpsCounter(new sf::Text()) {
+tt::DebugUI::DebugUI() : fpsCounter(new sf::Text()) {
     if (!this->defaultFont.loadFromFile("static/caskaydiaNF.ttf")) {
         std::cout << "Cant load default font" << std::endl;
     }
@@ -11,14 +11,14 @@ DebugUI::DebugUI() : fpsCounter(new sf::Text()) {
     this->fpsCounter->setFillColor(sf::Color::White);
 }
 
-DebugUI::~DebugUI() {
+tt::DebugUI::~DebugUI() {
     delete this->fpsCounter;
 }
 
-void DebugUI::update(DebugInfo debugInfo) {
+void tt::DebugUI::update(DebugInfo debugInfo) {
     this->fpsCounter->setString(debugInfo.deltaTime + " fps");
 }
 
-void DebugUI::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void tt::DebugUI::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*this->fpsCounter);
 }

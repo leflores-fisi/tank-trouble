@@ -3,14 +3,14 @@
 #include <vector>
 #include "Map/Map.hpp"
 
-Map::Map() :
+tt::Map::Map() :
     tilesize(128),
     walls(nullptr) {
 }
-Map::~Map() {
+tt::Map::~Map() {
     delete walls;
 }
-bool Map::load(std::string filename) {
+bool tt::Map::load(std::string filename) {
 
     // Open map file (currently didn't valid the file format)
     std::ifstream file(filename);
@@ -79,11 +79,11 @@ bool Map::load(std::string filename) {
     file.close();
     return true;
 }
-void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void tt::Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     for (const auto& wall : *this->walls) {
         target.draw(wall);
     }
 }
-std::vector<sf::RectangleShape>* Map::getWalls() {
+std::vector<sf::RectangleShape>* tt::Map::getWalls() {
     return this->walls;
 }
