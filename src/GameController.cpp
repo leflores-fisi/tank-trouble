@@ -12,8 +12,7 @@ tt::GameController::GameController() :
     map(new Map()),
     debugUI(new DebugUI()) {
 
-    Input::setup();
-    this->window->setKeyRepeatEnabled(false);
+    Input::setup(*this->window);
     this->map->load("static/maps/map.txt");
     tt::EntityManager::instantiate(new Player("player1", { 170.f, 170.f }));
 }

@@ -9,7 +9,7 @@ class Input {
   public:
     Input();
     ~Input();
-    static void setup();
+    static void setup(sf::RenderWindow &window);
     static bool isKeyPressed(sf::Keyboard::Key key);
     static bool isButtonPressed(sf::Mouse::Button button);
     static void pushKeyEvent(sf::Event event);

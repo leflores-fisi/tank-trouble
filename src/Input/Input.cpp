@@ -8,7 +8,9 @@ tt::Input::~Input() { }
  * Populate the Input::keysMap and Input::buttonsMap arrays
  * with the sfml key and button codes
  */
-void tt::Input::setup() {
+void tt::Input::setup(sf::RenderWindow &window) {
+
+    window.setKeyRepeatEnabled(false);
     // Keyboard keys setup
     sf::Keyboard::Key key = sf::Keyboard::Key::A;
     // Iterate and initialize all keys
