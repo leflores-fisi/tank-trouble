@@ -46,7 +46,7 @@ void tt::GameController::update() {
         // Cast to player
         auto pl = dynamic_cast<Player*>(p);
         collisionSystem.checkPlayerMapCollision(
-            *player,
+            *pl,
             *this->map->getWalls()
         );
         pl->update(this->dt);
