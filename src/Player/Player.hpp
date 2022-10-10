@@ -1,12 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Entity/Entity.hpp"
 #include "Player/Bullet.hpp"
 
 #define VEL 150.f
 
 namespace tt {
 
-class Player : public sf::Drawable {
+class Player : public tt::Entity {
     sf::RectangleShape *body;
     sf::Color bodyColor = sf::Color::White;
     sf::RectangleShape *canon;

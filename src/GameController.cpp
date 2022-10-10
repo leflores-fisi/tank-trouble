@@ -1,8 +1,11 @@
 #include <iostream>
 #include "GameController.hpp"
+#include "Entity/EntityManager.hpp"
 #include "Input/Input.hpp"
 
-// TODO: Class Entity
+// THE REAL TODO:
+// - make all the Drawables as an Entity
+// - implement entity selector
 
 tt::GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
@@ -17,8 +20,10 @@ tt::GameController::GameController() :
 }
 tt::GameController::~GameController() {
     delete this->window;
+    delete this->debugUI;
     delete this->player;
     delete this->map;
+    tt::EntityManager::deleteEntities();
 }
 
 void tt::GameController::mainLoop() {
@@ -70,10 +75,14 @@ void tt::GameController::handleEvents() {
 }
 void tt::GameController::render() {
     this->window->clear(sf::Color::Black);
+
+
     // Map
     this->window->draw(*this->map);
     // Entities
-    this->window->draw(*this->player);
+    for (const tt::Entity* e : tt::EntityManager::entities) {
+        this->window->draw(*e);
+    }
     // UI
     this->window->draw(*this->debugUI);
     this->window->display();
