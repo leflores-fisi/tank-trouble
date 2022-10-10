@@ -53,6 +53,7 @@ void tt::EntityManager::instantiate(tt::Entity* entity) {
     tt::EntityManager::entities.push_back(entity);
     std::cout << "Entity '" << entity->id << "' instantiated" << std::endl;
 }
+
 void tt::EntityManager::deleteEntity(tt::Entity* entityToRemove) {
     for (int i = 0; i < tt::EntityManager::entities.size(); i++) {
         auto currentEntity = tt::EntityManager::entities.at(i);
@@ -63,6 +64,7 @@ void tt::EntityManager::deleteEntity(tt::Entity* entityToRemove) {
         }
     }
 }
+
 void tt::EntityManager::deleteEntity(std::string idToRemove) {
     for (int i = 0; i < tt::EntityManager::entities.size(); i++) {
         auto currentEntity = tt::EntityManager::entities.at(i);
@@ -73,6 +75,7 @@ void tt::EntityManager::deleteEntity(std::string idToRemove) {
         }
     }
 }
+
 void tt::EntityManager::deleteALlEntities() {
     if (tt::EntityManager::entities.empty()) return;
 
@@ -81,4 +84,8 @@ void tt::EntityManager::deleteALlEntities() {
         delete e;
     }
     tt::EntityManager::entities.clear();
+}
+
+int tt::EntityManager::entityCount() {
+    return tt::EntityManager::entities.size();
 }

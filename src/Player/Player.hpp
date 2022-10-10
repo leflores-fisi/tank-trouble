@@ -18,9 +18,10 @@ class Player : public tt::Entity {
     float size = 30.f;
 
   public:
-    Player();
-    ~Player();
+    Player(std::string id, sf::Vector2f position);
+    Player(std::string id);
     Player(sf::Vector2f position);
+    ~Player();
 
     void update(float dt);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

@@ -18,5 +18,6 @@ class EntityManager {
     static void deleteEntity(tt::Entity* entity);
     static void deleteEntity(std::string id);
     static void deleteALlEntities();
+    static int  entityCount();
 };
 }

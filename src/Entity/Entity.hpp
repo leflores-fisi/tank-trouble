@@ -20,7 +20,7 @@ class Entity : public sf::Drawable {
 
     };
     ClassList classList;
-    Entity();
+    Entity(std::string id);
     virtual ~Entity();
     virtual void update(float dt) = 0;
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;

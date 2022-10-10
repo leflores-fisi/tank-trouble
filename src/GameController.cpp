@@ -15,7 +15,7 @@ tt::GameController::GameController() :
     Input::setup();
     this->window->setKeyRepeatEnabled(false);
     this->map->load("static/maps/map.txt");
-    tt::EntityManager::instantiate(new Player({ 190.f, 190.f }));
+    tt::EntityManager::instantiate(new Player("player1", { 170.f, 170.f }));
 }
 tt::GameController::~GameController() {
     delete this->window;

@@ -7,30 +7,30 @@
 #define CANON_LENGTH 30.f
 #define CANON_WIDTH 12.f
 
-tt::Player::Player() :
+tt::Player::Player(std::string id, sf::Vector2f position) :
     body(new sf::RectangleShape()),
     canon(new sf::RectangleShape({ CANON_LENGTH, CANON_WIDTH })),
     velocity({ 0, 0 }),
-    direction(sf::Vector2f({ 1.f, 0.f })) {
+    direction(sf::Vector2f({ 1.f, 0.f })),
+    Entity(id) {
 
-    this->id = "player1";
     this->classList.add("player");
-    std::cout << "Player created" << std::endl;
-    this->body->setSize({ this->size, this->size });
+
     this->body->setFillColor(sf::Color::White);
-    this->body->setPosition(70.f, 70.f);
+    this->body->setPosition(position);
+    this->body->setSize({ this->size, this->size });
+
     this->canon->setFillColor(this->canonColor);
     this->canon->setOrigin(-2.f, CANON_WIDTH/2);
 }
-tt::Player::Player(sf::Vector2f position): Player() {
-    this->body->setFillColor(sf::Color::White);
-    this->body->setPosition(position);
-    this->canon->setFillColor(sf::Color::Red);
-}
+tt::Player::Player(std::string id)        : Player(id, { 0.f, 0.f }) { }
+tt::Player::Player(sf::Vector2f position) : Player("", position)     { }
+
 tt::Player::~Player() {
     delete this->body;
     delete this->canon;
 }
+
 void tt::Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*this->body);
     target.draw(*this->canon);
