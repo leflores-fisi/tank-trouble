@@ -4,15 +4,20 @@
 #include "Input/Input.hpp"
 #include "Player/Player.hpp"
 
+#define CANON_LENGTH 30.f
+#define CANON_WIDTH 12.f
+
 tt::Player::Player() :
-    body(new sf::RectangleShape({ 30, 30 })),
-    canon(new sf::RectangleShape({ 50, 8 })),
+    body(new sf::RectangleShape()),
+    canon(new sf::RectangleShape({ CANON_LENGTH, CANON_WIDTH })),
     velocity({ 0, 0 }),
     direction(sf::Vector2f({ 1.f, 0.f })) {
 
+    this->body->setSize({ this->size, this->size });
     this->body->setFillColor(sf::Color::White);
     this->body->setPosition(70.f, 70.f);
     this->canon->setFillColor(this->canonColor);
+    this->canon->setOrigin(-2.f, CANON_WIDTH/2);
 }
 tt::Player::Player(sf::Vector2f position): Player() {
     this->body->setFillColor(sf::Color::White);

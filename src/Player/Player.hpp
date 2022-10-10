@@ -14,6 +14,7 @@ class Player : public sf::Drawable {
     sf::Vector2f velocity;
     sf::Vector2f direction; // normalized
     std::vector<tt::Bullet*> bullets;
+    float size = 30.f;
 
   public:
     Player();

@@ -4,12 +4,11 @@
 namespace tt {
 
 class Bullet : public sf::Drawable {
-    
     sf::Vector2f velocity;
     sf::RectangleShape body;
     sf::Vector2f direction;
     sf::Clock lifetime;
-    float speed = 250.f;
+    float speed = 300.f;
 
   public:
     Bullet(sf::Vector2f position, sf::Vector2f direction);

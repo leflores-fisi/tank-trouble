@@ -6,6 +6,7 @@ namespace tt {
 
 class Map : public sf::Drawable {
     size_t tilesize;
+    int wallWidth = 10;
     std::vector<sf::RectangleShape>* walls;
   public:
     Map();
