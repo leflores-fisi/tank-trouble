@@ -5,7 +5,6 @@
 
 // THE REAL TODO:
 // - make all the Drawables as an Entity
-// - implement entity selector
 
 tt::GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
@@ -21,9 +20,9 @@ tt::GameController::GameController() :
 tt::GameController::~GameController() {
     delete this->window;
     delete this->debugUI;
-    delete this->player;
+    delete this->player; // TODO: fix
     delete this->map;
-    tt::EntityManager::deleteEntities();
+    tt::EntityManager::deleteALlEntities();
 }
 
 void tt::GameController::mainLoop() {
@@ -40,13 +39,18 @@ void tt::GameController::update() {
 
     // First, check input and handle events
     this->handleEvents();
-
+    
     // Then, properly manage those events
-    collisionSystem.checkPlayerMapCollision(
-        *this->player,
-        *this->map->getWalls()
-    );
-    this->player->update(this->dt);
+    auto players = tt::EntityManager::querySelectorAll(".player");
+    for (const auto &p : players) {
+        // Cast to player
+        auto pl = dynamic_cast<Player*>(p);
+        collisionSystem.checkPlayerMapCollision(
+            *player,
+            *this->map->getWalls()
+        );
+        pl->update(this->dt);
+    }
 }
 void tt::GameController::handleEvents() {
     while (this->window->pollEvent(this->event)) {
@@ -66,16 +70,22 @@ void tt::GameController::handleEvents() {
         if (!this->window->hasFocus()) continue;
         if (type == sf::Event::KeyPressed || type == sf::Event::KeyReleased) {
             Input::pushKeyEvent(this->event);
+            if (this->event.key.code == sf::Keyboard::Escape) {
+                tt::EntityManager::deleteALlEntities();
+            }
         }
         if (type == sf::Event::MouseButtonPressed || type == sf::Event::MouseButtonReleased) {
             Input::pushMouseEvent(this->event);
         }
     }
-    this->player->handleInput(this->dt);
+    auto players = tt::EntityManager::querySelectorAll(".player");
+    for (const auto &p : players) {
+        auto pl = dynamic_cast<Player*>(p);
+        pl->handleInput(this->dt);
+    }
 }
 void tt::GameController::render() {
     this->window->clear(sf::Color::Black);
-
 
     // Map
     this->window->draw(*this->map);

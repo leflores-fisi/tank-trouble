@@ -13,6 +13,8 @@ tt::Player::Player() :
     velocity({ 0, 0 }),
     direction(sf::Vector2f({ 1.f, 0.f })) {
 
+    this->id = "player1";
+    this->classList.add("player");
     this->body->setSize({ this->size, this->size });
     this->body->setFillColor(sf::Color::White);
     this->body->setPosition(70.f, 70.f);
