@@ -12,7 +12,7 @@ class Player : public sf::Drawable {
     sf::VertexArray canonRay;
     sf::Vector2f velocity;
     sf::Vector2f direction; // normalized
-    std::vector<Bullet> bullets;
+    std::vector<Bullet*> bullets;
 
   public:
     Player();

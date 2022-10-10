@@ -36,10 +36,9 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*this->body);
     target.draw(*this->canon);
     target.draw(this->canonRay);
-    for (const Bullet &b : this->bullets) {
-        target.draw(b);
+    for (const Bullet* b : this->bullets) {
+        target.draw(*b);
     }
-    std::cout << "Bullets: " << this->bullets.size() << std::endl;
 }
 void Player::handleInput(float dt) {
     this->setVelocity({ 0, 0 });
@@ -54,12 +53,20 @@ void Player::update(float dt) {
     this->canon->setPosition(this->getCenterPosition());
     this->canonRay[0].position = this->getCenterPosition();
     this->canonRay[1].position = this->getCenterPosition() + this->velocity;
-    for (Bullet &b : this->bullets) {
-        b.update(dt);
+    for (int i = 0; i < bullets.size(); i++) {
+        auto &b = bullets.at(i);
+        if (b->getLifeTime().asSeconds() >= 1.f) {
+            delete b;
+            this->bullets.erase(this->bullets.begin() + i);
+        }
+        else b->update(dt);
     }
 }
 bool Player::shoot() {
-    this->bullets.push_back(Bullet(this->canon->getPosition(), this->direction));
+    if (this->bullets.size() >= 1) return false;
+    sf::Vector2f muzzle = this->getCenterPosition() + this->direction * canon->getSize().x;
+    Bullet* b = new Bullet(muzzle, this->direction);
+    this->bullets.push_back(b);
     return true;
 }
 void Player::addVelocity(float dt, int dir) {
