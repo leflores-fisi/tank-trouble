@@ -2,3 +2,4 @@
 bin/tank-trouble
 bin/tank-trouble.exe
 build/
+core.*
