@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Input/Input.hpp"
 
-tt::Input::Input()  { }
 tt::Input::~Input() { }
 
 /*

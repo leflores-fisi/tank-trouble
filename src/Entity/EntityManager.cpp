@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Entity/EntityManager.hpp"
 
+tt::EntityManager::~EntityManager() { }
+
 tt::Entity* tt::EntityManager::getById(std::string query_id) {
     if (query_id.empty()) throw std::invalid_argument("Query cannot be empty");
 

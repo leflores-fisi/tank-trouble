@@ -2,6 +2,8 @@
 #include <cmath>
 #include <iostream>
 
+tt::CollisionSystem::~CollisionSystem() { }
+
 bool tt::CollisionSystem::checkPlayerMapCollision(
     tt::Player& player,
     std::vector<sf::RectangleShape>& walls
