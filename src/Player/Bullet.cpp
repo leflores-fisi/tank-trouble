@@ -5,7 +5,7 @@
 tt::Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) :
     direction(direction),
     lifetime(sf::Clock()),
-    body(sf::RectangleShape({ 10.f, 10.f })),
+    body(sf::CircleShape(BULLET_RADIUS)),
     Entity("bullet"+std::to_string(rand())) {
 
     this->classList.add("bullet");

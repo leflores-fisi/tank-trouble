@@ -4,9 +4,11 @@
 
 namespace tt {
 
+#define BULLET_RADIUS 5.f
+
 class Bullet : public tt::Entity {
     sf::Vector2f velocity;
-    sf::RectangleShape body;
+    sf::CircleShape body;
     sf::Vector2f direction;
     sf::Clock lifetime;
     float speed = 300.f;
