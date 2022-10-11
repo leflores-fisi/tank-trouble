@@ -9,13 +9,14 @@ namespace tt {
 
 class Player : public tt::Entity {
     sf::RectangleShape *body;
-    sf::Color bodyColor = sf::Color::White;
     sf::RectangleShape *canon;
-    sf::Color canonColor = sf::Color::Red;
     sf::Vector2f velocity;
     sf::Vector2f direction; // normalized
-    std::vector<tt::Bullet*> bullets;
+    sf::Clock shootClock;
+    bool canShoot = true;
     float size = 30.f;
+    sf::Color bodyColor = sf::Color::White;
+    sf::Color canonColor = sf::Color::Red;
 
   public:
     Player(std::string id, sf::Vector2f position);
@@ -26,7 +27,6 @@ class Player : public tt::Entity {
     void update(float dt);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void rotate(float dt, int direction);
-    bool shoot();
     void handleInput(float dt);
 
     float getAngle();
@@ -39,5 +39,6 @@ class Player : public tt::Entity {
     void setVelocity(sf::Vector2f velocity);
   private:
     void addVelocity(float dt, int direction);
+    bool shoot();
 };
 }

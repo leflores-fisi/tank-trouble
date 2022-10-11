@@ -32,22 +32,27 @@ void tt::GameController::mainLoop() {
 }
 void tt::GameController::update() {
     DebugUI::DebugInfo info;
-    info.deltaTime = std::to_string(1.f/this->dt);
+    info.deltaTime = std::to_string(1.f/this->dt); // TODO: fix this
     this->debugUI->update(info);
 
     // First, check input and handle events
     this->handleEvents();
     
     // Then, properly manage those events
-    auto players = tt::EntityManager::querySelectorAll(".player");
-    for (const auto &p : players) {
-        // Cast to player
-        auto pl = dynamic_cast<Player*>(p);
-        collisionSystem.checkPlayerMapCollision(
-            *pl,
-            *this->map->getWalls()
-        );
-        pl->update(this->dt);
+    for (int i = 0; i < tt::EntityManager::entityCount(); i++) {
+        auto &e = tt::EntityManager::entities.at(i);
+
+        if (e->classList.contains("to-destroy")) {
+            tt::EntityManager::deleteEntity(e->id);
+            continue;
+        }
+        if (e->classList.contains("player")) {
+            collisionSystem.checkPlayerMapCollision(
+                *dynamic_cast<Player*>(e),
+                *this->map->getWalls()
+            );
+        }
+        e->update(this->dt);
     }
 }
 void tt::GameController::handleEvents() {
@@ -65,10 +70,10 @@ void tt::GameController::handleEvents() {
             std::cout << "New size: " << width << "x" << height << std::endl;
         }
 
-        if (!this->window->hasFocus()) continue;
         if (type == sf::Event::KeyPressed || type == sf::Event::KeyReleased) {
             Input::pushKeyEvent(this->event);
-            if (this->event.key.code == sf::Keyboard::Escape) {
+
+            if (this->event.key.code == sf::Keyboard::K) {
                 tt::EntityManager::deleteALlEntities();
             }
         }

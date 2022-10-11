@@ -59,6 +59,7 @@ void tt::EntityManager::deleteEntity(tt::Entity* entityToRemove) {
         auto currentEntity = tt::EntityManager::entities.at(i);
         if (currentEntity == entityToRemove) {
             tt::EntityManager::entities.erase(tt::EntityManager::entities.begin() + i);
+            std::cout << "Entity '" << entityToRemove->id << "' deleted" << std::endl;
             delete currentEntity;
             return;
         }
@@ -70,6 +71,7 @@ void tt::EntityManager::deleteEntity(std::string idToRemove) {
         auto currentEntity = tt::EntityManager::entities.at(i);
         if (currentEntity->id == idToRemove) {
             tt::EntityManager::entities.erase(tt::EntityManager::entities.begin() + i);
+            std::cout << "Entity '" << idToRemove << "' deleted" << std::endl;
             delete currentEntity;
             return;
         }

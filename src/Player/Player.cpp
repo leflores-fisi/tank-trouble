@@ -3,6 +3,7 @@
 #include <cmath>
 #include "Input/Input.hpp"
 #include "Player/Player.hpp"
+#include "Entity/EntityManager.hpp"
 
 #define CANON_LENGTH 30.f
 #define CANON_WIDTH 12.f
@@ -34,9 +35,6 @@ tt::Player::~Player() {
 void tt::Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*this->body);
     target.draw(*this->canon);
-    for (const tt::Bullet* b : this->bullets) {
-        target.draw(*b);
-    }
 }
 void tt::Player::handleInput(float dt) {
     this->setVelocity({ 0, 0 });
@@ -49,20 +47,14 @@ void tt::Player::handleInput(float dt) {
 void tt::Player::update(float dt) {
     this->body->move(this->velocity);
     this->canon->setPosition(this->getCenterPosition());
-    for (int i = 0; i < bullets.size(); i++) {
-        auto &b = bullets.at(i);
-        if (b->getLifeTime().asSeconds() >= 1.f) {
-            delete b;
-            this->bullets.erase(this->bullets.begin() + i);
-        }
-        else b->update(dt);
-    }
+    this->canShoot = shootClock.getElapsedTime().asSeconds() >= 0.5f;
 }
 bool tt::Player::shoot() {
-    if (this->bullets.size() >= 1) return false;
+    if (!this->canShoot) return false;
+
     sf::Vector2f muzzle = this->getCenterPosition() + this->direction * canon->getSize().x;
-    Bullet* b = new Bullet(muzzle, this->direction);
-    this->bullets.push_back(b);
+    tt::EntityManager::instantiate(new tt::Bullet(muzzle, this->direction));
+    this->shootClock.restart();
     return true;
 }
 void tt::Player::addVelocity(float dt, int dir) {

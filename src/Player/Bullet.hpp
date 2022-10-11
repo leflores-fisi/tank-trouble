@@ -1,9 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Entity/Entity.hpp"
 
 namespace tt {
 
-class Bullet : public sf::Drawable {
+class Bullet : public tt::Entity {
     sf::Vector2f velocity;
     sf::RectangleShape body;
     sf::Vector2f direction;
