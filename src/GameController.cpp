@@ -49,7 +49,7 @@ void tt::GameController::update() {
             continue;
         }
         if (e->classList.contains("player")) {
-            collisionSystem.checkPlayerMapCollision(
+            tt::CollisionSystem::checkPlayerMapCollision(
                 *dynamic_cast<Player*>(e),
                 *this->map->getWalls()
             );

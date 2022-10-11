@@ -13,7 +13,6 @@ class GameController {
     tt::DebugUI *debugUI;
     sf::Event event;
     sf::Clock clock;
-    tt::CollisionSystem collisionSystem;
     float dt;
 
     bool isRunning();

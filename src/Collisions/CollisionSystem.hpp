@@ -12,38 +12,38 @@ class CollisionSystem {
         sf::Vector2f contactNormal = {0, 0};
     };
   private:
-    bool checkRayVsRectCollision(
+    static bool checkRayVsRectCollision(
         sf::Vector2f rayOrigin,
         sf::Vector2f rayDirection,
         sf::RectangleShape rect,
         tt::CollisionSystem::CollisionInfo &info
     );
-    float getRayVsRectCollisionTime(
+    static float getRayVsRectCollisionTime(
         sf::Vector2f rayOrigin,
         sf::Vector2f rayDirection,
         sf::RectangleShape rect
     );
-    float getPlayerCollisionTime(
+    static float getPlayerCollisionTime(
         sf::Vector2f playerCenter,
         sf::Vector2f playerVelocity,
         sf::Vector2f playerSize,
         sf::RectangleShape wall
     );
-    bool checkPlayerVsWallCollision(
+    static bool checkPlayerVsWallCollision(
         sf::Vector2f playerCenter,
         sf::Vector2f playerVelocity,
         sf::Vector2f playerSize,
         sf::RectangleShape wall,
         tt::CollisionSystem::CollisionInfo &info
     );
-    void resolvePlayerCollision(
+    static void resolvePlayerCollision(
         tt::Player& player,
         tt::CollisionSystem::CollisionInfo info
     );
   public:
     CollisionSystem();
     ~CollisionSystem();
-    bool checkPlayerMapCollision(
+    static bool checkPlayerMapCollision(
         tt::Player& player,
         std::vector<sf::RectangleShape>& walls
     );

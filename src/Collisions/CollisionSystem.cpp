@@ -6,7 +6,7 @@ tt::CollisionSystem::CollisionSystem()  { }
 tt::CollisionSystem::~CollisionSystem() { }
 
 bool tt::CollisionSystem::checkPlayerMapCollision(
-    Player& player,
+    tt::Player& player,
     std::vector<sf::RectangleShape>& walls
 ) {
 
@@ -17,7 +17,7 @@ bool tt::CollisionSystem::checkPlayerMapCollision(
     for (int i = 0; i < walls.size(); i++) {
         sf::RectangleShape &wall = walls[i];
 
-        float hitTime = this->getPlayerCollisionTime(
+        float hitTime = tt::CollisionSystem::getPlayerCollisionTime(
             player.getCenterPosition(),
             player.getVelocity(),
             player.getSize(),
@@ -47,14 +47,14 @@ bool tt::CollisionSystem::checkPlayerMapCollision(
 
         // Collision info must be recalculated
         // because the player velocity changes as we resolve the collisions
-        this->checkPlayerVsWallCollision(
+        tt::CollisionSystem::checkPlayerVsWallCollision(
             player.getCenterPosition(),
             player.getVelocity(),
             player.getSize(),
             wall,
             collisionInfo // by ref
         );
-        this->resolvePlayerCollision(player, collisionInfo);
+        tt::CollisionSystem::resolvePlayerCollision(player, collisionInfo);
     }
 
     bool hasCollided = !collisionsList.empty();
@@ -77,7 +77,7 @@ float tt::CollisionSystem::getPlayerCollisionTime(
     target.setPosition(wall.getPosition() - playerSize/2.f);
     target.setSize(wall.getSize() + playerSize);
 
-    return this->getRayVsRectCollisionTime(
+    return tt::CollisionSystem::getRayVsRectCollisionTime(
         playerCenter,
         playerVelocity,
         target
@@ -98,7 +98,7 @@ bool tt::CollisionSystem::checkPlayerVsWallCollision(
     sf::Vector2f rectOrigin = target.getPosition();
     sf::Vector2f rectLimit  = target.getPosition() + target.getSize();
 
-    bool hasCollide = this->checkRayVsRectCollision(
+    bool hasCollide = tt::CollisionSystem::checkRayVsRectCollision(
         playerCenter,
         playerVelocity,
         target,
