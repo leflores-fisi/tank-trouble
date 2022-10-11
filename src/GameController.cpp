@@ -42,7 +42,7 @@ void tt::GameController::update() {
     for (int i = 0; i < tt::EntityManager::entityCount(); i++) {
         auto &e = tt::EntityManager::entities.at(i);
 
-        if (e->classList.contains("to-destroy")) {
+        if (e->classList.contains(DESTROY_CLASS)) {
             tt::EntityManager::deleteEntity(e->id);
             continue;
         }

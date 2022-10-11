@@ -19,7 +19,7 @@ void tt::Bullet::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 void tt::Bullet::update(float dt) {
     if (this->getLifeTime().asSeconds() >= 2.f) {
-        this->classList.add("to-destroy");
+        this->classList.add(DESTROY_CLASS);
     }
     else {
         this->velocity = this->direction * this->speed * dt;

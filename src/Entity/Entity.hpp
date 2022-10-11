@@ -3,22 +3,20 @@
 #include <algorithm>
 
 namespace tt {
+
+#define DESTROY_CLASS "destroy"
+#define HIDDEN_CLASS "hidden"
+
 // Base class for entities
 class Entity : public sf::Drawable {
   public:
-    std::string id;
     struct ClassList {
         std::vector<std::string> classnames;
-        void add(std::string classname) {
-            this->classnames.push_back(classname);
-        }
-        bool contains(std::string classname) {
-            return std::find(
-                classnames.begin(), classnames.end(), classname
-            ) != classnames.end();
-        }
-
+        void add     (std::string classname);
+        bool contains(std::string classname);
     };
+
+    std::string id;
     ClassList classList;
     Entity(std::string id);
     virtual ~Entity();
