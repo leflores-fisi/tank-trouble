@@ -3,8 +3,9 @@
 #include "Entity/EntityManager.hpp"
 #include "Input/Input.hpp"
 
-// THE REAL TODO:
-// - make all the Drawables as an Entity
+// TODO:
+// - Documentate code
+// - Bullets collision
 
 tt::GameController::GameController() :
     window(new sf::RenderWindow(sf::VideoMode(800, 600), "Tank trouble")),
