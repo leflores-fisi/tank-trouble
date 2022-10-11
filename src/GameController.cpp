@@ -32,7 +32,8 @@ void tt::GameController::mainLoop() {
 }
 void tt::GameController::update() {
     DebugUI::DebugInfo info;
-    info.deltaTime = std::to_string(1.f/this->dt); // TODO: fix this
+    info.fpsCount = std::to_string(1.f/this->dt);
+    info.entityCount = std::to_string(tt::EntityManager::entityCount());
     this->debugUI->update(info);
 
     // First, check input and handle events

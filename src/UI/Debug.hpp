@@ -5,11 +5,13 @@ namespace tt {
 
 class DebugUI : public sf::Drawable {
     sf::Text *fpsCounter;
+    sf::Text *entityCounter;
     sf::Font defaultFont;
 
   public:
     struct DebugInfo {
-        std::string deltaTime;
+        std::string fpsCount;
+        std::string entityCount;
     };
     DebugUI();
     ~DebugUI();
