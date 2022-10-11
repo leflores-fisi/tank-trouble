@@ -10,7 +10,7 @@ bool tt::CollisionSystem::checkPlayerMapCollision(
     std::vector<sf::RectangleShape>& walls
 ) {
 
-    std::vector<CollisionLog> collisionsLog;
+    std::vector<CollisionInfo> collisionsList;
 
     // Check for collisions with walls
     // Here we just need the time of collision in order to sort them
@@ -26,25 +26,24 @@ bool tt::CollisionSystem::checkPlayerMapCollision(
         bool isCollision = (hitTime >= 0 && hitTime <= 1);
 
         if (isCollision) {
-            CollisionLog collision;
+            CollisionInfo collision;
             collision.index = i;
             collision.time = hitTime;
-            collisionsLog.push_back(collision);
+            collisionsList.push_back(collision);
             wall.setFillColor(sf::Color::Red);
         }
         else wall.setFillColor(sf::Color(87, 104, 191));
     }
 
     // Sort the collisions by the time proximity
-    std::sort(collisionsLog.begin(), collisionsLog.end(),
-        [](CollisionLog &a, CollisionLog &b) {
+    std::sort(collisionsList.begin(), collisionsList.end(),
+        [](CollisionInfo &a, CollisionInfo &b) {
             return a.time < b.time;
         }
     );
     // Resolve each collision
-    for (const CollisionLog &collision : collisionsLog) {
-        CollisionInfo collisionInfo;
-        sf::RectangleShape &wall = walls.at(collision.index);
+    for (CollisionInfo &collisionInfo : collisionsList) {
+        sf::RectangleShape &wall = walls.at(collisionInfo.index);
 
         // Collision info must be recalculated
         // because the player velocity changes as we resolve the collisions
@@ -58,7 +57,7 @@ bool tt::CollisionSystem::checkPlayerMapCollision(
         this->resolvePlayerCollision(player, collisionInfo);
     }
 
-    bool hasCollided = !collisionsLog.empty();
+    bool hasCollided = !collisionsList.empty();
 
     if (!hasCollided) player.resetColor();
     else player.setColor(sf::Color::Magenta);
@@ -73,7 +72,7 @@ float tt::CollisionSystem::getPlayerCollisionTime(
     sf::RectangleShape wall
 ) {
 
-    // Expand the rect bounds to include the player size
+    // Expand the rect bounds
     sf::RectangleShape target;
     target.setPosition(wall.getPosition() - playerSize/2.f);
     target.setSize(wall.getSize() + playerSize);

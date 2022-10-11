@@ -6,14 +6,10 @@ namespace tt {
 
 class CollisionSystem {
   public:
-    struct CollisionLog {
-      int index;
-      float time;
-    };
     struct CollisionInfo {
         int index;
         float time;
-        sf::Vector2f contactNormal;
+        sf::Vector2f contactNormal = {0, 0};
     };
   private:
     bool checkRayVsRectCollision(

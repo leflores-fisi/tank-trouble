@@ -49,7 +49,7 @@ bool tt::Map::load(std::string filename) {
     if (this->walls != nullptr) delete this->walls;
     this->walls = new std::vector<sf::RectangleShape>();
 
-    // walls templates
+    // wall templates for pushing copies
     sf::RectangleShape verticalWall(sf::Vector2f(this->wallWidth, this->tilesize));
     verticalWall.setFillColor(sf::Color(120, 104, 191));
     sf::RectangleShape horizontalWall(sf::Vector2f(this->tilesize, this->wallWidth));
