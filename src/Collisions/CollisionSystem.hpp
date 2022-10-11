@@ -16,7 +16,7 @@ class CollisionSystem {
         sf::Vector2f rayOrigin,
         sf::Vector2f rayDirection,
         sf::RectangleShape rect,
-        CollisionInfo &info
+        tt::CollisionSystem::CollisionInfo &info
     );
     float getRayVsRectCollisionTime(
         sf::Vector2f rayOrigin,
@@ -34,17 +34,17 @@ class CollisionSystem {
         sf::Vector2f playerVelocity,
         sf::Vector2f playerSize,
         sf::RectangleShape wall,
-        CollisionSystem::CollisionInfo &info
+        tt::CollisionSystem::CollisionInfo &info
     );
     void resolvePlayerCollision(
-        Player& player,
-        CollisionSystem::CollisionInfo info
+        tt::Player& player,
+        tt::CollisionSystem::CollisionInfo info
     );
   public:
     CollisionSystem();
     ~CollisionSystem();
     bool checkPlayerMapCollision(
-        Player& player,
+        tt::Player& player,
         std::vector<sf::RectangleShape>& walls
     );
 };
