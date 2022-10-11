@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "GameController.hpp"
 
-int main() {
+int main(void) {
     tt::GameController *TankTrouble = new tt::GameController();
     TankTrouble->mainLoop();
     return 0;
