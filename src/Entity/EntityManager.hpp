@@ -10,7 +10,6 @@ class EntityManager {
     // Explicitly disallow copying
     EntityManager(const EntityManager&) = delete;
     EntityManager& operator=(const EntityManager&) = delete;
-    ~EntityManager();
 
     static std::vector<tt::Entity*> querySelectorAll(std::string query);
     static tt::Entity* getById(std::string id);
@@ -19,5 +18,7 @@ class EntityManager {
     static void deleteEntity(std::string id);
     static void deleteALlEntities();
     static int  entityCount();
+  private:
+    ~EntityManager();
 };
 }

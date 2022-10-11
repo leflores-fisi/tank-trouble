@@ -41,11 +41,15 @@ class CollisionSystem {
         tt::CollisionSystem::CollisionInfo info
     );
   public:
-    CollisionSystem();
-    ~CollisionSystem();
+    // Explicitly disallow copying
+    CollisionSystem(const CollisionSystem&) = delete;
+    CollisionSystem& operator=(const CollisionSystem&) = delete;
+
     static bool checkPlayerMapCollision(
         tt::Player& player,
         std::vector<sf::RectangleShape>& walls
     );
+  private:
+    ~CollisionSystem();
 };
 } // namespace tt
