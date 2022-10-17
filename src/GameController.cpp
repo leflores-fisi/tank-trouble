@@ -32,25 +32,34 @@ void tt::GameController::mainLoop() {
     }
 }
 void tt::GameController::update() {
-    DebugUI::DebugInfo info;
+    DebugUI::DebugInfo info; // TODO: move this down
     info.fpsCount = std::to_string(1.f/this->dt);
     info.entityCount = std::to_string(tt::EntityManager::entityCount());
     this->debugUI->update(info);
 
     // First, check input and handle events
     this->handleEvents();
-    
+
     // Then, properly manage those events
     for (int i = 0; i < tt::EntityManager::entityCount(); i++) {
-        auto &e = tt::EntityManager::entities.at(i);
+        tt::Entity* e = tt::EntityManager::entities.at(i);
 
         if (e->classList.contains(DESTROY_CLASS)) {
             tt::EntityManager::deleteEntity(e->id);
             continue;
         }
         if (e->classList.contains("player")) {
+            tt::Player* player = dynamic_cast<Player*>(e);
             tt::CollisionSystem::checkPlayerMapCollision(
-                *dynamic_cast<Player*>(e),
+                *player,
+                *this->map->getWalls()
+            );
+        }
+        if (e->classList.contains("bullet")) {
+            tt::Bullet* bullet = dynamic_cast<tt::Bullet*>(e);
+            bullet->calculateVelocity(this->dt);
+            tt::CollisionSystem::checkBulletMapCollision(
+                *bullet,
                 *this->map->getWalls()
             );
         }

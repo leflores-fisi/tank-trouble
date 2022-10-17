@@ -3,7 +3,8 @@
 #include "Entity/Entity.hpp"
 #include "Player/Bullet.hpp"
 
-#define VEL 150.f
+#define PLAYER_VELOCITY 150.f
+#define SHOOT_DELAY 0.2f
 
 namespace tt {
 

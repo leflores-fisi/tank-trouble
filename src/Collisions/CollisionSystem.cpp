@@ -1,8 +1,62 @@
-#include "CollisionSystem.hpp"
+#include "Collisions/CollisionSystem.hpp"
 #include <cmath>
 #include <iostream>
 
 tt::CollisionSystem::~CollisionSystem() { }
+
+void tt::CollisionSystem::checkBulletMapCollision(
+    tt::Bullet& bullet,
+    std::vector<sf::RectangleShape>& walls
+) {
+    // To perform collision resolution properly, we need check for collisions
+    // two times
+    // This is because if we check for only one collision, and resolve it
+    // changing the bullet's velocity, we might end up in a situation where
+    // the new velocity is colliding with another wall
+    // This situation happens often in walls corners and edges,
+    // so checking again we can resolve that new velocity
+
+    // First collision
+    tt::CollisionSystem::CollisionInfo firstCollision;
+
+    bool collision = false;
+    for (int i = 0; i < walls.size(); i++) {
+        // if (collisionsList.size() == 1) break;
+        sf::RectangleShape& currentWall = walls.at(i);
+        if (!tt::CollisionSystem::checkRectvsRectCollision(
+            bullet.getCenterPosition(),
+            bullet.getVelocity(),
+            bullet.getSize(),
+            currentWall,
+            firstCollision
+        )) continue;
+        if (firstCollision.time >= 0.f && firstCollision.time <= 1.f) {
+            collision = true;
+            tt::CollisionSystem::resolveBulletCollision(bullet, firstCollision);
+            break;
+        }
+    }
+    if (!collision) return;
+
+    // Second collision
+    tt::CollisionSystem::CollisionInfo secondCollision;
+
+    for (int i = 0; i < walls.size(); i++) {
+        sf::RectangleShape& currentWall = walls.at(i);
+        if (!tt::CollisionSystem::checkRectvsRectCollision(
+            bullet.getCenterPosition(),
+            bullet.getVelocity(),
+            bullet.getSize(),
+            currentWall,
+            firstCollision
+        )) continue;
+        if (firstCollision.time >= 0.f && firstCollision.time <= 1.f) {
+            collision = true;
+            tt::CollisionSystem::resolveBulletCollision(bullet, firstCollision);
+            break;
+        }
+    }
+}
 
 bool tt::CollisionSystem::checkPlayerMapCollision(
     tt::Player& player,
@@ -14,13 +68,13 @@ bool tt::CollisionSystem::checkPlayerMapCollision(
     // Check for collisions with walls
     // Here we just need the time of collision in order to sort them
     for (int i = 0; i < walls.size(); i++) {
-        sf::RectangleShape &wall = walls[i];
+        sf::RectangleShape &currentWall = walls[i];
 
-        float hitTime = tt::CollisionSystem::getPlayerCollisionTime(
+        float hitTime = tt::CollisionSystem::getRectvsRectCollisionTime(
             player.getCenterPosition(),
             player.getVelocity(),
             player.getSize(),
-            wall
+            currentWall
         );
         bool isCollision = (hitTime >= 0 && hitTime <= 1);
 
@@ -29,77 +83,71 @@ bool tt::CollisionSystem::checkPlayerMapCollision(
             collision.index = i;
             collision.time = hitTime;
             collisionsList.push_back(collision);
-            wall.setFillColor(sf::Color::Red);
+            currentWall.setFillColor(sf::Color::Red);
         }
-        else wall.setFillColor(sf::Color(87, 104, 191));
+        else currentWall.setFillColor(sf::Color(87, 104, 191));
     }
 
     // Sort the collisions by the time proximity
     std::sort(collisionsList.begin(), collisionsList.end(),
-        [](CollisionInfo &a, CollisionInfo &b) {
+        [](const CollisionInfo &a, const CollisionInfo &b) {
             return a.time < b.time;
         }
     );
     // Resolve each collision
     for (CollisionInfo &collisionInfo : collisionsList) {
-        sf::RectangleShape &wall = walls.at(collisionInfo.index);
+        sf::RectangleShape &currentWall = walls.at(collisionInfo.index);
 
         // Collision info must be recalculated
         // because the player velocity changes as we resolve the collisions
-        tt::CollisionSystem::checkPlayerVsWallCollision(
+        tt::CollisionSystem::checkRectvsRectCollision(
             player.getCenterPosition(),
             player.getVelocity(),
             player.getSize(),
-            wall,
+            currentWall,
             collisionInfo // by ref
         );
         tt::CollisionSystem::resolvePlayerCollision(player, collisionInfo);
     }
 
     bool hasCollided = !collisionsList.empty();
-
-    if (!hasCollided) player.resetColor();
-    else player.setColor(sf::Color::Magenta);
-
     return hasCollided;
 }
 
-float tt::CollisionSystem::getPlayerCollisionTime(
-    sf::Vector2f playerCenter,
-    sf::Vector2f playerVelocity,
-    sf::Vector2f playerSize,
+float tt::CollisionSystem::getRectvsRectCollisionTime(
+    sf::Vector2f rectCenter,
+    sf::Vector2f rectVelocity,
+    sf::Vector2f rectSize,
     sf::RectangleShape wall
 ) {
 
     // Expand the rect bounds
     sf::RectangleShape target;
-    target.setPosition(wall.getPosition() - playerSize/2.f);
-    target.setSize(wall.getSize() + playerSize);
+    target.setPosition(wall.getPosition() - rectSize/2.f);
+    target.setSize(wall.getSize() + rectSize);
 
     return tt::CollisionSystem::getRayVsRectCollisionTime(
-        playerCenter,
-        playerVelocity,
+        rectCenter,
+        rectVelocity,
         target
     );
 }
-bool tt::CollisionSystem::checkPlayerVsWallCollision(
-    sf::Vector2f playerCenter,
-    sf::Vector2f playerVelocity,
-    sf::Vector2f playerSize,
+
+bool tt::CollisionSystem::checkRectvsRectCollision(
+    sf::Vector2f rectCenter,
+    sf::Vector2f rectVelocity,
+    sf::Vector2f rectSize,
     sf::RectangleShape wall,
     CollisionSystem::CollisionInfo& info
 ) { 
     // Expand the rect bounds to include the player size
     sf::RectangleShape target;
-    target.setPosition(wall.getPosition() - playerSize/2.f);
-    target.setSize(wall.getSize() + playerSize);
-
-    sf::Vector2f rectOrigin = target.getPosition();
-    sf::Vector2f rectLimit  = target.getPosition() + target.getSize();
+    target.setPosition(wall.getPosition() - rectSize/2.f);
+    target.setSize(wall.getSize() + rectSize);
 
     bool hasCollide = tt::CollisionSystem::checkRayVsRectCollision(
-        playerCenter,
-        playerVelocity,
+        rectCenter,
+        rectVelocity,
         target,
         info
     );
@@ -193,13 +241,38 @@ bool tt::CollisionSystem::checkRayVsRectCollision(
     }
     return true;
 }
+
 void tt::CollisionSystem::resolvePlayerCollision(
-    Player& player,
-    CollisionSystem::CollisionInfo info
+    tt::Player& player,
+    tt::CollisionSystem::CollisionInfo info
 ) {
     sf::Vector2f resolvedVelocity = player.getVelocity();
 
     resolvedVelocity.x += std::abs(resolvedVelocity.x) * info.contactNormal.x * (1.f-info.time);
     resolvedVelocity.y += std::abs(resolvedVelocity.y) * info.contactNormal.y * (1.f-info.time);
     player.setVelocity(resolvedVelocity);
+}
+
+void tt::CollisionSystem::resolveBulletCollision(
+    tt::Bullet& bullet,
+    tt::CollisionSystem::CollisionInfo info
+) {
+    // Save the bullet's direction
+    float dirX = bullet.getDirection().x;
+    float dirY = bullet.getDirection().y;
+
+    sf::Vector2f velocityToContact = bullet.getVelocity() * info.time;
+    // Calculate the reflected direction and reflected velocity
+    sf::Vector2f reflectionVector = bullet.getVelocity() * (1 - info.time);
+
+    if (info.contactNormal.x != 0) {
+        dirX = -dirX;
+        reflectionVector.x = -reflectionVector.x;
+    }
+    if (info.contactNormal.y != 0) {
+        dirY = -dirY;
+        reflectionVector.y = -reflectionVector.y;
+    }
+    bullet.setVelocity(velocityToContact + reflectionVector);
+    bullet.setDirection(sf::Vector2f(dirX, dirY));
 }

@@ -7,6 +7,7 @@
 
 #define CANON_LENGTH 30.f
 #define CANON_WIDTH 12.f
+#define ROTATION_SPEED 5.f
 
 tt::Player::Player(std::string id, sf::Vector2f position) :
     body(new sf::RectangleShape()),
@@ -47,7 +48,7 @@ void tt::Player::handleInput(float dt) {
 void tt::Player::update(float dt) {
     this->body->move(this->velocity);
     this->canon->setPosition(this->getCenterPosition());
-    this->canShoot = shootClock.getElapsedTime().asSeconds() >= 0.5f;
+    this->canShoot = shootClock.getElapsedTime().asSeconds() >= SHOOT_DELAY;
 }
 bool tt::Player::shoot() {
     if (!this->canShoot) return false;
@@ -58,12 +59,12 @@ bool tt::Player::shoot() {
     return true;
 }
 void tt::Player::addVelocity(float dt, int dir) {
-    float offsetx = this->direction.x * VEL * dt;
-    float offsety = this->direction.y * VEL * dt;
+    float offsetx = this->direction.x * PLAYER_VELOCITY * dt;
+    float offsety = this->direction.y * PLAYER_VELOCITY * dt;
     this->velocity = { offsetx*dir, offsety*dir };
 }
 void tt::Player::rotate(float dt, int dir) {
-    float rad_angle = this->getAngle() + (dir*dt*5);
+    float rad_angle = this->getAngle() + (dir*dt*ROTATION_SPEED);
     float deg_angle = rad_angle * (180/M_PI);
     this->canon->setRotation(deg_angle);
     // Save the direction of the canon
