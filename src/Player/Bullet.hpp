@@ -12,7 +12,6 @@ class Bullet : public tt::Entity {
     sf::Vector2f direction;
     sf::Clock lifetime;
     float speed = 300.f;
-    sf::VertexArray velocityLine;
 
   public:
     sf::CircleShape body;

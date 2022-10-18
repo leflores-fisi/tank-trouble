@@ -11,8 +11,6 @@ tt::Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) :
     Entity("bullet"+std::to_string(rand())) {
 
     this->classList.add("bullet");
-    this->velocityLine.append(sf::Vertex(position, sf::Color::Red));
-    this->velocityLine.append(sf::Vertex(position + sf::Vector2f({10.f, 10.f}), sf::Color::Red));
     this->body.setFillColor(sf::Color::Red);
     this->body.setPosition(position);
 }
@@ -20,7 +18,6 @@ tt::Bullet::~Bullet() { }
 
 void tt::Bullet::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(this->body);
-    target.draw(this->velocityLine);
 }
 void tt::Bullet::update(float dt) {
     if (this->getLifeTime().asSeconds() >= 10.f) {
@@ -29,8 +26,6 @@ void tt::Bullet::update(float dt) {
     }
     // The velocity is calculated and resolved in tt::CollisionSystem::checkBulletMapCollision
     this->body.move(this->velocity);
-    this->velocityLine[0].position = this->getCenterPosition();
-    this->velocityLine[1].position = this->getCenterPosition() + this->velocity;
     for (auto p : tt::EntityManager::querySelectorAll(".player")) {
         tt::Player* player = dynamic_cast<tt::Player*>(p);
 
