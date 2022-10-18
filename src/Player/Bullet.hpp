@@ -5,6 +5,7 @@
 namespace tt {
 
 #define BULLET_RADIUS 5.f
+#define BULLET_HIT_DELAY 0.1f
 
 class Bullet : public tt::Entity {
     sf::Vector2f velocity;

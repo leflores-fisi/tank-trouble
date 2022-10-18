@@ -34,7 +34,10 @@ void tt::Bullet::update(float dt) {
     for (auto p : tt::EntityManager::querySelectorAll(".player")) {
         tt::Player* player = dynamic_cast<tt::Player*>(p);
 
-        if (player->body->getGlobalBounds().intersects(this->body.getGlobalBounds())) {
+        if (
+            this->body.getGlobalBounds().intersects(player->body->getGlobalBounds())
+            && lifetime.getElapsedTime().asSeconds() > BULLET_HIT_DELAY
+        ) {
             std::cout << "Hit player " << player->id << std::endl;
         }
     }
