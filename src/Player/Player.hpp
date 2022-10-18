@@ -9,6 +9,7 @@
 namespace tt {
 
 class Player : public tt::Entity {
+    friend class tt::Bullet;
     sf::RectangleShape *body;
     sf::RectangleShape *canon;
     sf::Vector2f velocity;

@@ -54,7 +54,7 @@ bool tt::Player::shoot() {
     if (!this->canShoot) return false;
 
     sf::Vector2f center = this->getCenterPosition() - sf::Vector2f(BULLET_RADIUS, BULLET_RADIUS);
-    sf::Vector2f muzzle = center + this->direction * CANON_LENGTH/4.f;
+    sf::Vector2f muzzle = center + this->direction * CANON_LENGTH/3.f;
     tt::EntityManager::instantiate(new tt::Bullet(muzzle, this->direction));
     this->shootClock.restart();
     return true;

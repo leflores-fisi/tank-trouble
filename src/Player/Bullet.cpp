@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Player/Bullet.hpp"
+#include "Player/Player.hpp"
 #include "Entity/Entity.hpp"
+#include "Entity/EntityManager.hpp"
 
 tt::Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) :
     direction(direction),
@@ -29,6 +31,13 @@ void tt::Bullet::update(float dt) {
     this->body.move(this->velocity);
     this->velocityLine[0].position = this->getCenterPosition();
     this->velocityLine[1].position = this->getCenterPosition() + this->velocity;
+    for (auto p : tt::EntityManager::querySelectorAll(".player")) {
+        tt::Player* player = dynamic_cast<tt::Player*>(p);
+
+        if (player->body->getGlobalBounds().intersects(this->body.getGlobalBounds())) {
+            std::cout << "Hit player " << player->id << std::endl;
+        }
+    }
 }
 void tt::Bullet::calculateVelocity(float dt) {
     this->velocity = this->direction * this->speed * dt;
