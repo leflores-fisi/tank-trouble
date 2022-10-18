@@ -5,8 +5,8 @@
 #include "Player/Player.hpp"
 #include "Entity/EntityManager.hpp"
 
-#define CANON_LENGTH 30.f
-#define CANON_WIDTH 12.f
+#define CANON_LENGTH 24.f
+#define CANON_WIDTH 14.f
 #define ROTATION_SPEED 5.f
 
 tt::Player::Player(std::string id, sf::Vector2f position) :
@@ -53,7 +53,8 @@ void tt::Player::update(float dt) {
 bool tt::Player::shoot() {
     if (!this->canShoot) return false;
 
-    sf::Vector2f muzzle = this->getCenterPosition() + this->direction * canon->getSize().x;
+    sf::Vector2f center = this->getCenterPosition() - sf::Vector2f(BULLET_RADIUS, BULLET_RADIUS);
+    sf::Vector2f muzzle = center + this->direction * CANON_LENGTH/4.f;
     tt::EntityManager::instantiate(new tt::Bullet(muzzle, this->direction));
     this->shootClock.restart();
     return true;
