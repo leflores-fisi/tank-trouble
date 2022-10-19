@@ -10,6 +10,15 @@ namespace tt {
 
 class Player : public tt::Entity {
     friend class tt::Bullet;
+  public:
+    struct Controls {
+        sf::Keyboard::Key forward;
+        sf::Keyboard::Key rotateLeft;
+        sf::Keyboard::Key backward;
+        sf::Keyboard::Key rotateRight;
+        sf::Keyboard::Key shoot;
+    };
+  private:
     sf::RectangleShape *body;
     sf::RectangleShape *canon;
     sf::Vector2f velocity;
@@ -19,11 +28,10 @@ class Player : public tt::Entity {
     float size = 30.f;
     sf::Color bodyColor = sf::Color::White;
     sf::Color canonColor = sf::Color::Red;
+    Controls controls;
 
   public:
-    Player(std::string id, sf::Vector2f position);
-    Player(std::string id);
-    Player(sf::Vector2f position);
+    Player(std::string id, sf::Vector2f position, tt::Player::Controls controls);
     ~Player();
 
     void update(float dt);

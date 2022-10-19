@@ -15,7 +15,20 @@ tt::GameController::GameController() :
 
     Input::setup(*this->window);
     this->map->load("static/maps/map.txt");
-    tt::EntityManager::instantiate(new Player("player1", { 170.f, 170.f }));
+    tt::EntityManager::instantiate(new Player("player1", { 170.f, 170.f }, {
+        sf::Keyboard::W,
+        sf::Keyboard::A,
+        sf::Keyboard::S,
+        sf::Keyboard::D,
+        sf::Keyboard::Q
+    }));
+    tt::EntityManager::instantiate(new Player("player2", { 950.f, 550.f }, {
+        sf::Keyboard::Up,
+        sf::Keyboard::Left,
+        sf::Keyboard::Down,
+        sf::Keyboard::Right,
+        sf::Keyboard::P
+    }));
 }
 tt::GameController::~GameController() {
     delete this->window;

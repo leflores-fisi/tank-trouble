@@ -14,8 +14,9 @@ class Bullet : public tt::Entity {
     float speed = 300.f;
 
   public:
+    const std::string owner;
     sf::CircleShape body;
-    Bullet(sf::Vector2f position, sf::Vector2f direction);
+    Bullet(sf::Vector2f position, sf::Vector2f direction, std::string owner);
     ~Bullet();
     void update(float dt);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

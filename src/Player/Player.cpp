@@ -9,11 +9,12 @@
 #define CANON_WIDTH 14.f
 #define ROTATION_SPEED 5.f
 
-tt::Player::Player(std::string id, sf::Vector2f position) :
+tt::Player::Player(std::string id, sf::Vector2f position, tt::Player::Controls controls) :
     body(new sf::RectangleShape()),
     canon(new sf::RectangleShape({ CANON_LENGTH, CANON_WIDTH })),
     velocity({ 0, 0 }),
     direction(sf::Vector2f({ 1.f, 0.f })),
+    controls(controls),
     Entity(id) {
 
     this->classList.add("player");
@@ -25,8 +26,6 @@ tt::Player::Player(std::string id, sf::Vector2f position) :
     this->canon->setFillColor(this->canonColor);
     this->canon->setOrigin(-2.f, CANON_WIDTH/2);
 }
-tt::Player::Player(std::string id)        : Player(id, { 0.f, 0.f }) { }
-tt::Player::Player(sf::Vector2f position) : Player("", position)     { }
 
 tt::Player::~Player() {
     delete this->body;
@@ -37,13 +36,14 @@ void tt::Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(*this->body);
     target.draw(*this->canon);
 }
+
 void tt::Player::handleInput(float dt) {
     this->setVelocity({ 0, 0 });
-    if (tt::Input::isKeyPressed(sf::Keyboard::W)) this->addVelocity(dt, 1);
-    if (tt::Input::isKeyPressed(sf::Keyboard::A)) this->rotate(dt, -1);
-    if (tt::Input::isKeyPressed(sf::Keyboard::S)) this->addVelocity(dt, -1);
-    if (tt::Input::isKeyPressed(sf::Keyboard::D)) this->rotate(dt, 1);
-    if (tt::Input::isKeyPressed(sf::Keyboard::Space)) this->shoot();
+    if (Input::isKeyPressed(this->controls.forward))     this->addVelocity(dt, 1);
+    if (Input::isKeyPressed(this->controls.rotateLeft))  this->rotate(dt, -1);
+    if (Input::isKeyPressed(this->controls.backward))    this->addVelocity(dt, -1);
+    if (Input::isKeyPressed(this->controls.rotateRight)) this->rotate(dt, 1);
+    if (Input::isKeyPressed(this->controls.shoot))       this->shoot();
 }
 void tt::Player::update(float dt) {
     this->body->move(this->velocity);
@@ -55,7 +55,7 @@ bool tt::Player::shoot() {
 
     sf::Vector2f center = this->getCenterPosition() - sf::Vector2f(BULLET_RADIUS, BULLET_RADIUS);
     sf::Vector2f muzzle = center + this->direction * CANON_LENGTH/3.f;
-    tt::EntityManager::instantiate(new tt::Bullet(muzzle, this->direction));
+    tt::EntityManager::instantiate(new tt::Bullet(muzzle, this->direction, this->id));
     this->shootClock.restart();
     return true;
 }

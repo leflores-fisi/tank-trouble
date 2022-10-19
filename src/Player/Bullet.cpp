@@ -4,11 +4,12 @@
 #include "Entity/Entity.hpp"
 #include "Entity/EntityManager.hpp"
 
-tt::Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction) :
+tt::Bullet::Bullet(sf::Vector2f position, sf::Vector2f direction, std::string owner) :
     direction(direction),
     lifetime(sf::Clock()),
     body(sf::CircleShape(BULLET_RADIUS)),
-    Entity("bullet"+std::to_string(rand())) {
+    Entity("bullet"+std::to_string(rand())),
+    owner(owner) {
 
     this->classList.add("bullet");
     this->body.setFillColor(sf::Color::Red);
@@ -33,7 +34,8 @@ void tt::Bullet::update(float dt) {
             this->body.getGlobalBounds().intersects(player->body->getGlobalBounds())
             && lifetime.getElapsedTime().asSeconds() > BULLET_HIT_DELAY
         ) {
-            std::cout << "Hit player " << player->id << std::endl;
+            player->classList.add(DESTROY_CLASS);
+            this->classList.add(DESTROY_CLASS);
         }
     }
 }
