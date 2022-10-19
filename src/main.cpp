@@ -1,4 +1,4 @@
-#include "GameController.hpp"
+#include "GameController/GameController.hpp"
 
 int main(void) {
     tt::GameController *TankTrouble = new tt::GameController();

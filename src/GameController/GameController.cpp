@@ -1,5 +1,5 @@
 #include <iostream>
-#include "GameController.hpp"
+#include "GameController/GameController.hpp"
 #include "Entity/EntityManager.hpp"
 #include "Input/Input.hpp"
 
