@@ -32,7 +32,7 @@ void tt::Bullet::update(float dt) {
 
         if (
             this->body.getGlobalBounds().intersects(player->body->getGlobalBounds())
-            && lifetime.getElapsedTime().asSeconds() > BULLET_HIT_DELAY
+            && (lifetime.getElapsedTime().asSeconds() > BULLET_HIT_DELAY || this->owner != player->id)
         ) {
             player->classList.add(DESTROY_CLASS);
             this->classList.add(DESTROY_CLASS);
